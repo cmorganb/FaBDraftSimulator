@@ -9,7 +9,7 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 |---|---|---|---|---|
 | WP-00 | Repo, tooling, CI | - | DONE | [WP-00.md](./WP-00.md) |
 | WP-01 | Set ingestion + fixture set | WP-00 | DONE | [WP-01.md](./WP-01.md) |
-| WP-02 | Set validation gate | WP-01 | NOT STARTED | - |
+| WP-02 | Set validation gate | WP-01 | DONE | [WP-02.md](./WP-02.md) |
 | WP-03 | Contracts + codegen | WP-00 | DONE | [WP-03.md](./WP-03.md) |
 | WP-04 | Seeded RNG + event store | WP-03 | DONE | [WP-04.md](./WP-04.md) |
 | WP-05 | Pack generator | WP-02, WP-04 | NOT STARTED | - |
@@ -37,9 +37,8 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 
 ## Notes for the next agent
 
-- WP-02 is the natural next pick: only depends on WP-01 (done), is Size S,
-  and unblocks WP-05/WP-06 in parallel. WP-04 (done) is also a dependency
-  for WP-05/WP-07.
+- WP-05 (pack generator) and WP-06 (card model/legality) are both now
+  unblocked (WP-02 and WP-04 are done) and can proceed in parallel.
 - `apps/web` is an empty placeholder (no `package.json`) - the environment
   this repo was scaffolded in has no working `npm`. Confirm npm works before
   claiming WP-19+. See `docs/decisions/ADR-0001-uv-workspace-and-deferred-web-tooling.md`.

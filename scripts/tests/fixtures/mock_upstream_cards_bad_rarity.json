@@ -1,0 +1,31 @@
+[
+  {
+    "unique_id": "mock-uid-bad-001",
+    "name": "Fixture Unmappable Rarity",
+    "color": "Red",
+    "pitch": "1",
+    "cost": "1",
+    "power": "2",
+    "defense": "2",
+    "health": "",
+    "intelligence": "",
+    "types": ["Action"],
+    "traits": [],
+    "card_keywords": [],
+    "ability_and_effect_keywords": [],
+    "functional_text": "",
+    "functional_text_plain": "",
+    "printings": [
+      {
+        "unique_id": "mock-print-bad-001a",
+        "id": "MOCK900",
+        "set_id": "MOCK",
+        "edition": "N",
+        "expansion_slot": false,
+        "foiling": "S",
+        "rarity": "S",
+        "image_url": null
+      }
+    ]
+  }
+]

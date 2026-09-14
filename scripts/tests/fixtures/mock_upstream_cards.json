@@ -1,0 +1,176 @@
+[
+  {
+    "unique_id": "mock-uid-001",
+    "name": "Fixture Swift Strike",
+    "color": "Red",
+    "pitch": "1",
+    "cost": "1",
+    "power": "3",
+    "defense": "2",
+    "health": "",
+    "intelligence": "",
+    "types": ["Action", "Attack"],
+    "traits": [],
+    "card_keywords": [],
+    "ability_and_effect_keywords": [],
+    "functional_text": "",
+    "functional_text_plain": "",
+    "printings": [
+      {
+        "unique_id": "mock-print-001a",
+        "id": "MOCK001",
+        "set_id": "MOCK",
+        "edition": "N",
+        "expansion_slot": false,
+        "foiling": "S",
+        "rarity": "C",
+        "image_url": "https://example.invalid/MOCK001.png"
+      }
+    ]
+  },
+  {
+    "unique_id": "mock-uid-002",
+    "name": "Fixture Umbral Slice",
+    "color": "Yellow",
+    "pitch": "2",
+    "cost": "2",
+    "power": "6",
+    "defense": "3",
+    "health": "",
+    "intelligence": "",
+    "types": ["Runeblade", "Shadow", "Action", "Attack"],
+    "traits": [],
+    "card_keywords": ["Blood Debt"],
+    "ability_and_effect_keywords": ["Go Again"],
+    "functional_text": "**Blood Debt**\nSpecialization: Fixture Hero One.",
+    "functional_text_plain": "Blood Debt\nSpecialization: Fixture Hero One.",
+    "printings": [
+      {
+        "unique_id": "mock-print-002a",
+        "id": "MOCK002",
+        "set_id": "MOCK",
+        "edition": "N",
+        "expansion_slot": false,
+        "foiling": "S",
+        "rarity": "M",
+        "image_url": "https://example.invalid/MOCK002.png"
+      }
+    ]
+  },
+  {
+    "unique_id": "mock-uid-003",
+    "name": "Fixture Bonecraft Ritual",
+    "color": "Blue",
+    "pitch": "3",
+    "cost": "0",
+    "power": "",
+    "defense": "",
+    "health": "",
+    "intelligence": "",
+    "types": ["Necromancer", "Shadow", "Instant"],
+    "traits": [],
+    "card_keywords": [],
+    "ability_and_effect_keywords": [],
+    "functional_text": "",
+    "functional_text_plain": "",
+    "printings": [
+      {
+        "unique_id": "mock-print-003a",
+        "id": "MOCK003",
+        "set_id": "MOCK",
+        "edition": "N",
+        "expansion_slot": false,
+        "foiling": "S",
+        "rarity": "R",
+        "image_url": "https://example.invalid/MOCK003.png"
+      }
+    ]
+  },
+  {
+    "unique_id": "mock-uid-004",
+    "name": "Fixture Rustblade",
+    "color": "",
+    "pitch": "",
+    "cost": "",
+    "power": "3",
+    "defense": "",
+    "health": "",
+    "intelligence": "",
+    "types": ["Weapon", "One Hand"],
+    "traits": [],
+    "card_keywords": [],
+    "ability_and_effect_keywords": [],
+    "functional_text": "",
+    "functional_text_plain": "",
+    "printings": [
+      {
+        "unique_id": "mock-print-004a",
+        "id": "MOCK004",
+        "set_id": "MOCK",
+        "edition": "N",
+        "expansion_slot": false,
+        "foiling": "S",
+        "rarity": "B",
+        "image_url": "https://example.invalid/MOCK004.png"
+      }
+    ]
+  },
+  {
+    "unique_id": "mock-uid-005",
+    "name": "Fixture Mysterious Relic",
+    "color": "",
+    "pitch": "",
+    "cost": "2",
+    "power": "",
+    "defense": "",
+    "health": "",
+    "intelligence": "",
+    "types": ["SomeUnknownFutureType"],
+    "traits": [],
+    "card_keywords": [],
+    "ability_and_effect_keywords": [],
+    "functional_text": "",
+    "functional_text_plain": "",
+    "printings": [
+      {
+        "unique_id": "mock-print-005a",
+        "id": "MOCK005",
+        "set_id": "MOCK",
+        "edition": "N",
+        "expansion_slot": false,
+        "foiling": "S",
+        "rarity": "C",
+        "image_url": null
+      }
+    ]
+  },
+  {
+    "unique_id": "mock-uid-006",
+    "name": "Fixture From Another Set",
+    "color": "Red",
+    "pitch": "1",
+    "cost": "1",
+    "power": "2",
+    "defense": "2",
+    "health": "",
+    "intelligence": "",
+    "types": ["Action"],
+    "traits": [],
+    "card_keywords": [],
+    "ability_and_effect_keywords": [],
+    "functional_text": "",
+    "functional_text_plain": "",
+    "printings": [
+      {
+        "unique_id": "mock-print-006a",
+        "id": "OTHER001",
+        "set_id": "OTHER",
+        "edition": "N",
+        "expansion_slot": false,
+        "foiling": "S",
+        "rarity": "C",
+        "image_url": null
+      }
+    ]
+  }
+]

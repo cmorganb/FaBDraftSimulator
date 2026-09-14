@@ -1,0 +1,59 @@
+{
+  "set_code": "FIXTURE",
+  "deck_size": 30,
+  "deck_size_mode": "exact",
+  "heroes": [
+    {
+      "uid": "fixture-hero-brute-none",
+      "name": "Fixture Hero Brute",
+      "classes": [
+        "Brute"
+      ],
+      "talents": [
+        "Shadow"
+      ],
+      "basic_weapon_uids": [
+        "fixture-hero-brute-weapon-none"
+      ],
+      "basic_equipment_uids": [
+        "fixture-hero-brute-armguard-none"
+      ]
+    },
+    {
+      "uid": "fixture-hero-necromancer-none",
+      "name": "Fixture Hero Necromancer",
+      "classes": [
+        "Necromancer"
+      ],
+      "talents": [
+        "Shadow"
+      ],
+      "basic_weapon_uids": [
+        "fixture-hero-necromancer-weapon-none"
+      ],
+      "basic_equipment_uids": [
+        "fixture-hero-necromancer-armguard-none"
+      ]
+    },
+    {
+      "uid": "fixture-hero-runeblade-none",
+      "name": "Fixture Hero Runeblade",
+      "classes": [
+        "Runeblade"
+      ],
+      "talents": [
+        "Shadow"
+      ],
+      "basic_weapon_uids": [
+        "fixture-hero-runeblade-weapon-none"
+      ],
+      "basic_equipment_uids": [
+        "fixture-hero-runeblade-armguard-none"
+      ]
+    }
+  ],
+  "basic_pool_unlimited": true,
+  "allow_prerelease_hero": false,
+  "format_restrictions": [],
+  "notes": "Synthetic fixture mirroring plan section 5.3's iar.format.json shape."
+}

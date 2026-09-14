@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    # No network during tests/lint (NFR 11 "Offline", CI gate 6): the only
+    # network use in this repo is scripts/ingest_set.py, which is never
+    # invoked by CI.
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Sync dependencies
+        run: uv sync --all-packages --dev
+
+      - name: ruff check
+        run: uv run ruff check .
+
+      - name: ruff format --check
+        run: uv run ruff format --check .
+
+      - name: mypy --strict (core)
+        run: uv run mypy --strict packages/core
+
+      - name: Regenerate contracts and diff-check
+        run: |
+          uv run python scripts/generate_contract_models.py
+          git diff --exit-code -- packages/core/fabdraft_core/contracts/generated
+
+      - name: Purity gate - no randomness outside rng.py
+        run: |
+          if grep -rnE '(^|[^a-zA-Z0-9_.])random\.' \
+              --include='*.py' packages/core packages/agents \
+              | grep -v 'packages/core/fabdraft_core/rng.py'; then
+            echo "::error::stdlib 'random.' usage found outside rng.py"
+            exit 1
+          fi
+
+      - name: Purity gate - no network/env imports in core
+        run: |
+          if grep -rnE '^\s*(import|from)\s+(requests|httpx|anthropic)\b' \
+              --include='*.py' packages/core; then
+            echo "::error::forbidden import inside packages/core"
+            exit 1
+          fi
+          if grep -rn 'os\.environ' --include='*.py' packages/core; then
+            echo "::error::os.environ read inside packages/core"
+            exit 1
+          fi
+
+      - name: Data gate - no licensed card data committed
+        run: |
+          if git ls-files data/sets | grep -v '\.gitkeep$'; then
+            echo "::error::files committed under data/sets/"
+            exit 1
+          fi
+
+      - name: pytest with coverage
+        run: |
+          uv run pytest packages/core --cov=fabdraft_core --cov-report=term-missing
+          uv run pytest packages/agents packages/exports
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for apps/web scaffold
+        id: check
+        run: echo "exists=$(test -f apps/web/package.json && echo true || echo false)" >> "$GITHUB_OUTPUT"
+      - name: web tooling not yet scaffolded
+        if: steps.check.outputs.exists == 'false'
+        run: echo "apps/web has no package.json yet (deferred, see docs/decisions/ADR-0001) - nothing to run"
+      # eslint/tsc steps are added once apps/web/package.json exists (WP-19+).

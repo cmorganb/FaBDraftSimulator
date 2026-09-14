@@ -1,0 +1,16 @@
+[project]
+name = "fabdraft-cli"
+version = "0.1.0"
+description = "fabdraft CLI: sim, replay, validate-set, fetch-images (placeholder - WP-17)"
+requires-python = ">=3.12"
+dependencies = [
+    "fabdraft-core",
+    "fabdraft-agents",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["fabdraft_cli"]

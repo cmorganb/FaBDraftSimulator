@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.venv/
+venv/
+dist/
+build/
+
+# uv
+uv.lock.tmp
+
+# Node (apps/web, once scaffolded)
+node_modules/
+apps/web/dist/
+apps/web/.vite/
+
+# Generated / contract codegen output is committed intentionally;
+# only build caches are ignored above.
+
+# Licensed card data and images: never committed (plan section 11, IP)
+data/sets/**
+!data/sets/.gitkeep
+data/images/
+runs/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store

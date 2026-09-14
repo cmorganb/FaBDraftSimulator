@@ -1,0 +1,16 @@
+[project]
+name = "fabdraft-api"
+version = "0.1.0"
+description = "FastAPI session transport (placeholder - WP-18)"
+requires-python = ">=3.12"
+dependencies = [
+    "fabdraft-core",
+    "fabdraft-agents",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["fabdraft_api"]

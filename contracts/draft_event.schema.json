@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabdraftsim/contracts/draft_event.schema.json",
+  "title": "DraftEvent",
+  "description": "One append-only event in a session's event log, per plan section 5.5. `payload` is intentionally loose (additionalProperties: true): its shape is a function of `type`, and a full discriminated-union schema per event type is deferred to WP-07/WP-11 once the state machine defines every payload precisely.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "session_id", "ts_sim_ms", "ts_wall", "type", "payload"],
+  "properties": {
+    "event_id": { "type": "integer", "minimum": 0 },
+    "session_id": { "type": "string" },
+    "ts_sim_ms": { "type": "integer", "minimum": 0 },
+    "ts_wall": { "type": "string", "format": "date-time" },
+    "type": {
+      "type": "string",
+      "enum": [
+        "SESSION_CREATED",
+        "SEED_SET",
+        "POD_SEATED",
+        "PACK_OPENED",
+        "EXTRAS_REMOVED",
+        "PACK_PRESENTED",
+        "PICK_WINDOW_OPENED",
+        "PICK_MADE",
+        "PICK_AUTO",
+        "PACK_SHUFFLED",
+        "PACK_PASSED",
+        "ROUND_COMPLETE",
+        "REVIEW_OPENED",
+        "REVIEW_CLOSED",
+        "POOL_FINALIZED",
+        "HERO_SELECTED",
+        "DECK_CARD_ADDED",
+        "DECK_CARD_REMOVED",
+        "DECK_SUBMITTED",
+        "VALIDATION_RESULT",
+        "EXPORT_WRITTEN",
+        "SESSION_ENDED"
+      ]
+    },
+    "round": { "type": ["integer", "null"], "minimum": 1, "maximum": 3 },
+    "pick_number": { "type": ["integer", "null"], "minimum": 1 },
+    "seat": { "type": ["integer", "null"], "minimum": 0, "maximum": 7 },
+    "payload": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabdraftsim/contracts/session_config.schema.json",
+  "title": "SessionConfig",
+  "description": "New-session configuration, per plan sections 3.1 and 9.1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "set_code",
+    "seed",
+    "pod_size",
+    "seats",
+    "timers_enabled",
+    "casual_mode",
+    "full_procedure_mode",
+    "memory_policy",
+    "allow_prerelease_hero"
+  ],
+  "properties": {
+    "set_code": { "type": "string" },
+    "seed": {
+      "type": ["string", "null"],
+      "description": "null means a random seed is generated and shown after creation (plan section 3.1)."
+    },
+    "pod_size": { "type": "integer", "const": 8 },
+    "seats": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["seat", "agent_kind"],
+        "properties": {
+          "seat": { "type": "integer", "minimum": 0, "maximum": 7 },
+          "agent_kind": { "type": "string", "enum": ["human", "heuristic", "llm"] },
+          "model": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "timers_enabled": { "type": "boolean" },
+    "casual_mode": {
+      "type": "boolean",
+      "description": "Relaxes D6/D8 information rules for beginners; must be stamped on logs/exports (plan section 3.2)."
+    },
+    "full_procedure_mode": {
+      "type": "boolean",
+      "description": "Simulates TRP 8.2.2/8.2.3 registration plus deck-build timers."
+    },
+    "memory_policy": {
+      "type": "string",
+      "enum": ["none", "own_pool", "full_recall"],
+      "description": "Plan section 8.3. full_recall is deliberately superhuman and must be stamped in the log."
+    },
+    "allow_prerelease_hero": {
+      "type": "boolean",
+      "description": "Default false; Baalghor is pre-release-kit-only (plan S11)."
+    }
+  }
+}

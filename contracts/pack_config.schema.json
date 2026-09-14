@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabdraftsim/contracts/pack_config.schema.json",
+  "title": "PackConfig",
+  "description": "Booster pack slot configuration for a set, per plan section 5.4.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["set_code", "pack_size", "slots", "no_duplicate_uids_within_pack", "cold_foil_rate_per_pack"],
+  "properties": {
+    "set_code": { "type": "string" },
+    "pack_size": { "type": "integer", "minimum": 1 },
+    "slots": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "count", "rarities", "draftable"],
+        "properties": {
+          "id": { "type": "string" },
+          "count": { "type": "integer", "minimum": 1 },
+          "rarities": {
+            "type": "object",
+            "description": "Rarity code (or subset key like M_expansion/CF) -> sampling weight. Weights need not sum to 1 across a heterogeneous key set; the pack generator normalizes.",
+            "minProperties": 1,
+            "additionalProperties": { "type": "number", "minimum": 0 }
+          },
+          "draftable": { "type": "boolean" },
+          "foiling": { "type": ["string", "null"] },
+          "majestic_subset": {
+            "type": ["string", "null"],
+            "enum": ["core", "expansion", null]
+          },
+          "confidence": {
+            "type": ["string", "null"],
+            "enum": ["VERIFIED", "ESTIMATED", null]
+          }
+        }
+      }
+    },
+    "no_duplicate_uids_within_pack": { "type": "boolean" },
+    "cold_foil_rate_per_pack": { "type": "number", "minimum": 0, "maximum": 1 }
+  }
+}

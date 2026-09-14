@@ -29,6 +29,7 @@ dev = [
     "mypy>=1.11.2",
     "pre-commit>=3.8",
     "jsonschema>=4.23",
+    "types-jsonschema>=4.23",
     "datamodel-code-generator>=0.26",
 ]
 
@@ -50,6 +51,8 @@ python_version = "3.12"
 strict = true
 warn_unused_configs = true
 exclude = ["contracts/generated"]
+explicit_package_bases = true
+mypy_path = ["packages/core", "packages/agents", "packages/exports"]
 # Once WP-03 generates fabdraft_core.contracts.generated.*, add a
 # [[tool.mypy.overrides]] block for it (generated code, not hand-checked).
 

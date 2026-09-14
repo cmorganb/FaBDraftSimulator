@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabdraftsim/contracts/card.schema.json",
+  "title": "Card",
+  "description": "A unique card (name + pitch), per plan section 5.1. Printings are collapsed; foiling is a property of a drafted instance, not the card.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "uid",
+    "set_code",
+    "card_number",
+    "name",
+    "pitch",
+    "rarity",
+    "types",
+    "classes",
+    "talents",
+    "subtypes",
+    "cost",
+    "power",
+    "defense",
+    "life",
+    "intellect",
+    "keywords",
+    "functional_text",
+    "specialization",
+    "is_deck_card",
+    "is_arena_card",
+    "equipment_slot",
+    "hands",
+    "image_url",
+    "double_faced_with",
+    "draftable",
+    "data_complete"
+  ],
+  "properties": {
+    "uid": {
+      "type": "string",
+      "description": "Stable identifier for this unique card (name + pitch), e.g. 'IAR166-red'."
+    },
+    "set_code": { "type": "string" },
+    "card_number": { "type": "string" },
+    "name": { "type": "string" },
+    "pitch": {
+      "type": ["integer", "null"],
+      "enum": [1, 2, 3, null],
+      "description": "1=red, 2=yellow, 3=blue; null for cards with no pitch value (e.g. heroes, weapons)."
+    },
+    "rarity": {
+      "type": "string",
+      "enum": ["B", "C", "R", "M", "L", "V", "F"],
+      "description": "Basic, Common, Rare, Majestic, Legendary, Marvel, Fabled. Mapped explicitly from source data, never guessed (plan section 5.1)."
+    },
+    "types": { "type": "array", "items": { "type": "string" } },
+    "classes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Empty array means Generic."
+    },
+    "talents": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Empty array means no talent."
+    },
+    "subtypes": { "type": "array", "items": { "type": "string" } },
+    "cost": {
+      "type": ["integer", "null"],
+      "description": "Numeric resource cost. Cards with a variable cost (X, etc.) are a known ingestion gap - see docs/status/WP-01.md."
+    },
+    "power": { "type": ["integer", "null"] },
+    "defense": { "type": ["integer", "null"] },
+    "life": { "type": ["integer", "null"] },
+    "intellect": { "type": ["integer", "null"] },
+    "keywords": { "type": "array", "items": { "type": "string" } },
+    "functional_text": { "type": "string" },
+    "specialization": {
+      "type": ["string", "null"],
+      "description": "Hero name if this card's text contains a Specialization restriction."
+    },
+    "is_deck_card": { "type": "boolean" },
+    "is_arena_card": { "type": "boolean" },
+    "equipment_slot": {
+      "type": ["string", "null"],
+      "enum": ["head", "chest", "arms", "legs", null]
+    },
+    "hands": {
+      "type": ["integer", "null"],
+      "enum": [1, 2, null]
+    },
+    "image_url": { "type": ["string", "null"], "format": "uri" },
+    "double_faced_with": { "type": ["string", "null"] },
+    "draftable": {
+      "type": "boolean",
+      "description": "Computed by pack/format config, not read from source data (plan section 5.1)."
+    },
+    "data_complete": {
+      "type": "boolean",
+      "description": "False on any card with a missing required field; loading a set with incomplete cards requires --allow-incomplete (WP-02)."
+    }
+  }
+}

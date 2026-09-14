@@ -10,7 +10,7 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 | WP-00 | Repo, tooling, CI | - | DONE | [WP-00.md](./WP-00.md) |
 | WP-01 | Set ingestion + fixture set | WP-00 | NOT STARTED | - |
 | WP-02 | Set validation gate | WP-01 | NOT STARTED | - |
-| WP-03 | Contracts + codegen | WP-00 | NOT STARTED | - |
+| WP-03 | Contracts + codegen | WP-00 | DONE | [WP-03.md](./WP-03.md) |
 | WP-04 | Seeded RNG + event store | WP-03 | NOT STARTED | - |
 | WP-05 | Pack generator | WP-02, WP-04 | NOT STARTED | - |
 | WP-06 | Card model, indexes, legality | WP-02 | NOT STARTED | - |

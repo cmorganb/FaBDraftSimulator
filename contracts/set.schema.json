@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabdraftsim/contracts/set.schema.json",
+  "title": "SetSnapshot",
+  "description": "An ingested set snapshot, per plan section 5.2.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "set_code",
+    "name",
+    "release_date",
+    "source",
+    "expected_counts",
+    "cards",
+    "integrity"
+  ],
+  "properties": {
+    "set_code": { "type": "string" },
+    "name": { "type": "string" },
+    "release_date": { "type": "string", "format": "date" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "commit", "retrieved_at"],
+      "properties": {
+        "provider": { "type": "string" },
+        "commit": { "type": "string" },
+        "retrieved_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "expected_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "F", "V", "L", "M", "R", "C", "B"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "F": { "type": "integer", "minimum": 0 },
+        "V": { "type": "integer", "minimum": 0 },
+        "L": { "type": "integer", "minimum": 0 },
+        "M": { "type": "integer", "minimum": 0 },
+        "R": { "type": "integer", "minimum": 0 },
+        "C": { "type": "integer", "minimum": 0 },
+        "B": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "cards": {
+      "type": "array",
+      "items": { "$ref": "card.schema.json" }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["counts_match", "incomplete_cards"],
+      "properties": {
+        "counts_match": { "type": "boolean" },
+        "incomplete_cards": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "uids of cards with data_complete=false."
+        }
+      }
+    }
+  }
+}

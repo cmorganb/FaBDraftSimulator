@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabdraftsim/contracts/decklist.schema.json",
+  "title": "Decklist",
+  "description": "Canonical decklist export, per plan section 10 (decklist.json row).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "session_id",
+    "seat",
+    "hero",
+    "arena_cards",
+    "deck_cards",
+    "pool",
+    "validation",
+    "data_integrity"
+  ],
+  "$defs": {
+    "card_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uid", "name", "pitch", "quantity"],
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "pitch": { "type": ["integer", "null"] },
+        "quantity": { "type": "integer", "minimum": 1 }
+      }
+    }
+  },
+  "properties": {
+    "session_id": { "type": "string" },
+    "seat": { "type": "integer", "minimum": 0, "maximum": 7 },
+    "hero": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uid", "name"],
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" }
+      }
+    },
+    "arena_cards": { "type": "array", "items": { "$ref": "#/$defs/card_ref" } },
+    "deck_cards": { "type": "array", "items": { "$ref": "#/$defs/card_ref" } },
+    "pool": { "type": "array", "items": { "$ref": "#/$defs/card_ref" } },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["valid", "violations"],
+      "properties": {
+        "valid": { "type": "boolean" },
+        "violations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["code", "message"],
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "DECK_SIZE",
+                  "ILLEGAL_CARD",
+                  "NOT_IN_POOL",
+                  "NO_HERO",
+                  "HERO_NOT_YOUNG",
+                  "EQUIP_SLOT_CONFLICT",
+                  "WEAPON_HANDS",
+                  "ARENA_CARD_IN_DECK",
+                  "FORMAT_RESTRICTION"
+                ]
+              },
+              "message": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "data_integrity": { "type": "string", "enum": ["complete", "incomplete"] }
+  }
+}

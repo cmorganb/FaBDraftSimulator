@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabdraftsim/contracts/pick_decision.schema.json",
+  "title": "PickDecision",
+  "description": "What an Agent.pick() returns, per plan section 8.1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["picked_uid"],
+  "properties": {
+    "picked_uid": { "type": "string" },
+    "reasoning": { "type": ["string", "null"] },
+    "hero_lean": { "type": ["string", "null"] },
+    "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+    "ranked_alternatives": {
+      "type": ["array", "null"],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["uid", "score"],
+        "properties": {
+          "uid": { "type": "string" },
+          "score": { "type": "number" }
+        }
+      }
+    }
+  }
+}

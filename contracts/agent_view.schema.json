@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabdraftsim/contracts/agent_view.schema.json",
+  "title": "AgentView",
+  "description": "The only thing an Agent receives, per plan section 5.6. Every object in this schema uses additionalProperties: false and an explicit allow-list, so no field can carry another seat's identity, pool, or pick without a schema change (enforced further by a unit test - see packages/core/tests/test_agent_view_contract.py).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "seat",
+    "pod_size",
+    "round",
+    "pick_number",
+    "picks_remaining_in_round",
+    "pass_direction",
+    "time_limit_ms",
+    "pack",
+    "own_pool",
+    "own_pool_visible",
+    "memory",
+    "format",
+    "notes"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "seat": { "type": "integer", "minimum": 0, "maximum": 7 },
+    "pod_size": { "type": "integer", "minimum": 2 },
+    "round": { "type": "integer", "minimum": 1, "maximum": 3 },
+    "pick_number": { "type": "integer", "minimum": 1 },
+    "picks_remaining_in_round": { "type": "integer", "minimum": 0 },
+    "pass_direction": { "type": "string", "enum": ["left", "right"] },
+    "time_limit_ms": { "type": ["integer", "null"], "minimum": 0 },
+    "pack": { "type": "array", "items": { "$ref": "card.schema.json" } },
+    "own_pool": { "type": "array", "items": { "$ref": "card.schema.json" } },
+    "own_pool_visible": { "type": "boolean" },
+    "memory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seen_packs", "own_picks_this_round"],
+      "properties": {
+        "seen_packs": {
+          "type": "array",
+          "items": { "type": "array", "items": { "$ref": "card.schema.json" } }
+        },
+        "own_picks_this_round": {
+          "type": "array",
+          "items": { "$ref": "card.schema.json" }
+        }
+      }
+    },
+    "format": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deck_size", "heroes", "basics_available"],
+      "properties": {
+        "deck_size": { "type": "integer", "minimum": 1 },
+        "heroes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["uid", "name", "classes", "talents"],
+            "properties": {
+              "uid": { "type": "string" },
+              "name": { "type": "string" },
+              "classes": { "type": "array", "items": { "type": "string" } },
+              "talents": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "basics_available": { "type": "boolean" }
+      }
+    },
+    "notes": { "type": "string" }
+  }
+}

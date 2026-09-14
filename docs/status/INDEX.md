@@ -11,7 +11,7 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 | WP-01 | Set ingestion + fixture set | WP-00 | DONE | [WP-01.md](./WP-01.md) |
 | WP-02 | Set validation gate | WP-01 | NOT STARTED | - |
 | WP-03 | Contracts + codegen | WP-00 | DONE | [WP-03.md](./WP-03.md) |
-| WP-04 | Seeded RNG + event store | WP-03 | NOT STARTED | - |
+| WP-04 | Seeded RNG + event store | WP-03 | DONE | [WP-04.md](./WP-04.md) |
 | WP-05 | Pack generator | WP-02, WP-04 | NOT STARTED | - |
 | WP-06 | Card model, indexes, legality | WP-02 | NOT STARTED | - |
 | WP-07 | Draft state machine | WP-04, WP-05 | NOT STARTED | - |

@@ -40,9 +40,11 @@ jobs:
           git diff --exit-code -- packages/core/fabdraft_core/contracts/generated
 
       - name: Purity gate - no randomness outside rng.py
+        # Test files are exempt: test_rng.py deliberately touches the
+        # global `random` module to prove SeededRng is isolated from it.
         run: |
           if grep -rnE '(^|[^a-zA-Z0-9_.])random\.' \
-              --include='*.py' packages/core packages/agents \
+              --include='*.py' packages/core/fabdraft_core packages/agents/fabdraft_agents \
               | grep -v 'packages/core/fabdraft_core/rng.py'; then
             echo "::error::stdlib 'random.' usage found outside rng.py"
             exit 1

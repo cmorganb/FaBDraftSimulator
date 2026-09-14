@@ -73,6 +73,7 @@ def run_codegen() -> None:
             "--use-standard-collections",
             "--use-union-operator",
             "--snake-case-field",
+            "--disable-timestamp",
             "--formatters",
             "ruff-check",
             "ruff-format",

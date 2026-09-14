@@ -53,7 +53,11 @@ class Card(BaseModel):
     double_faced_with: str | None
     draftable: bool = Field(
         ...,
-        description="Computed by pack/format config, not read from source data (plan section 5.1).",
+        description="Default/example draftability for this printing (e.g. false for a Basic-rarity or expansion-slot Majestic). The pack generator (WP-05) computes the *actual* draftability of a given drafted instance from the slot it came from, which can override this - see fabdraft_core.packs.generator.",
+    )
+    is_expansion_slot: bool = Field(
+        ...,
+        description="True for a Majestic printed only in the expansion (non-core) subset of the set (plan S13), mapped from the upstream dataset's printings[].expansion_slot field. False for every other card. Used by the pack generator to keep expansion-slot Majestics out of every draftable pack slot (S13).",
     )
     data_complete: bool = Field(
         ...,

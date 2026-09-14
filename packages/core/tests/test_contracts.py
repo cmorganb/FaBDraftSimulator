@@ -66,6 +66,7 @@ def _minimal_card(uid: str = "FIXTURE001-1") -> dict[str, Any]:
         "image_url": None,
         "double_faced_with": None,
         "draftable": True,
+        "is_expansion_slot": False,
         "data_complete": True,
     }
 

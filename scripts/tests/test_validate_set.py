@@ -39,6 +39,7 @@ def _minimal_card(uid: str, rarity: str, *, data_complete: bool = True) -> dict:
         "image_url": None,
         "double_faced_with": None,
         "draftable": True,
+        "is_expansion_slot": False,
         "data_complete": data_complete,
     }
 

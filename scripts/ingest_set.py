@@ -201,6 +201,24 @@ def derive_equipment(types: list[str]) -> tuple[str | None, int | None]:
     return equipment_slot, hands
 
 
+_DRAFTABLE_RARITIES = {"C", "R"}  # plan section 5.4: common/rare slots are always draftable
+
+
+def default_draftable(rarity: str, is_expansion_slot: bool) -> bool:
+    """A best-effort default per plan section 5.4's pack slot design: common
+    and rare are always draftable; a core Majestic is draftable, an
+    expansion-slot one is not (S13); Basic/Legendary/Marvel/Fabled only ever
+    appear in non-draftable slots. The pack generator (WP-05) still computes
+    the *actual* draftability of a drafted instance from the slot it came
+    from - this is just a sane default for the static Card record.
+    """
+    if rarity in _DRAFTABLE_RARITIES:
+        return True
+    if rarity == "M":
+        return not is_expansion_slot
+    return False
+
+
 def map_card(raw_card: dict[str, Any], printing: dict[str, Any], set_code: str) -> Card:
     """Map one (card, printing) pair from the upstream schema to our Card
     contract. Raises DataIncompleteError if a required field is absent.
@@ -238,6 +256,7 @@ def map_card(raw_card: dict[str, Any], printing: dict[str, Any], set_code: str) 
     )
 
     is_arena_card = bool({"Hero", "Weapon", "Head", "Chest", "Arms", "Legs"} & set(types))
+    is_expansion_slot = bool(printing.get("expansion_slot", False))
 
     data_complete = fully_classified
 
@@ -267,7 +286,8 @@ def map_card(raw_card: dict[str, Any], printing: dict[str, Any], set_code: str) 
         image_url=printing.get("image_url"),
         double_faced_with=None,  # DFC presence is a VERIFY item for IAR (plan D11/R5); no
         # data to derive it from yet, so this is intentionally left unset rather than guessed.
-        draftable=False,  # computed by pack/format config elsewhere, per plan section 5.1
+        draftable=default_draftable(rarity, is_expansion_slot),
+        is_expansion_slot=is_expansion_slot,
         data_complete=data_complete,
     )
 

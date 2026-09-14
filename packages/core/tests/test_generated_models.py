@@ -37,6 +37,7 @@ def test_card_model_round_trips_a_minimal_instance() -> None:
         "image_url": None,
         "double_faced_with": None,
         "draftable": True,
+        "is_expansion_slot": False,
         "data_complete": True,
     }
     card = Card.model_validate(data)

@@ -172,5 +172,34 @@
         "image_url": null
       }
     ]
+  },
+  {
+    "unique_id": "mock-uid-007",
+    "name": "Fixture Expansion Majestic",
+    "color": "Blue",
+    "pitch": "3",
+    "cost": "3",
+    "power": "5",
+    "defense": "4",
+    "health": "",
+    "intelligence": "",
+    "types": ["Action", "Attack"],
+    "traits": [],
+    "card_keywords": [],
+    "ability_and_effect_keywords": [],
+    "functional_text": "",
+    "functional_text_plain": "",
+    "printings": [
+      {
+        "unique_id": "mock-print-007a",
+        "id": "MOCK007",
+        "set_id": "MOCK",
+        "edition": "N",
+        "expansion_slot": true,
+        "foiling": "S",
+        "rarity": "M",
+        "image_url": null
+      }
+    ]
   }
 ]

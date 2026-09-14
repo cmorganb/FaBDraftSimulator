@@ -16,6 +16,7 @@ from scripts.ingest_set import (
     build_snapshot,
     cards_for_set,
     classify_types,
+    default_draftable,
     derive_equipment,
     derive_specialization,
     make_uid,
@@ -112,6 +113,32 @@ def test_map_card_unknown_type_marks_data_incomplete(mock_cards: list[dict]) -> 
     assert "SomeUnknownFutureType" in card.subtypes
 
 
+def test_map_card_expansion_slot_majestic(mock_cards: list[dict]) -> None:
+    raw = mock_cards[6]
+    card = map_card(raw, raw["printings"][0], "MOCK")
+    assert card.rarity == "M"
+    assert card.is_expansion_slot is True
+    assert card.draftable is False  # default_draftable: expansion majestics aren't draftable
+
+
+def test_map_card_core_majestic_is_not_expansion_slot(mock_cards: list[dict]) -> None:
+    raw = mock_cards[1]  # Fixture Umbral Slice, expansion_slot: false
+    card = map_card(raw, raw["printings"][0], "MOCK")
+    assert card.is_expansion_slot is False
+    assert card.draftable is True
+
+
+def test_default_draftable() -> None:
+    assert default_draftable("C", is_expansion_slot=False) is True
+    assert default_draftable("R", is_expansion_slot=False) is True
+    assert default_draftable("M", is_expansion_slot=False) is True
+    assert default_draftable("M", is_expansion_slot=True) is False
+    assert default_draftable("B", is_expansion_slot=False) is False
+    assert default_draftable("L", is_expansion_slot=False) is False
+    assert default_draftable("V", is_expansion_slot=False) is False
+    assert default_draftable("F", is_expansion_slot=False) is False
+
+
 def test_map_card_requires_a_rarity() -> None:
     raw = {"unique_id": "x", "name": "Fixture No Rarity", "pitch": "1", "types": []}
     with pytest.raises(DataIncompleteError):
@@ -128,13 +155,13 @@ def test_map_card_rejects_unmapped_rarity_code() -> None:
 def test_cards_for_set_filters_by_set_id_and_excludes_other_sets(mock_cards: list[dict]) -> None:
     cards = cards_for_set(mock_cards, "MOCK")
     # mock_cards includes one card only printed for set_id "OTHER"
-    assert len(cards) == 5
+    assert len(cards) == 6
     assert all(c.set_code == "MOCK" for c in cards)
     assert "fixture-from-another-set-red" not in {c.uid for c in cards}
 
 
 def test_build_snapshot_computes_counts_and_incomplete_list(mock_cards: list[dict]) -> None:
-    expected_counts = {"total": 5, "F": 0, "V": 0, "L": 0, "M": 1, "R": 1, "C": 2, "B": 1}
+    expected_counts = {"total": 6, "F": 0, "V": 0, "L": 0, "M": 2, "R": 1, "C": 2, "B": 1}
     snapshot = build_snapshot(
         raw_cards=mock_cards,
         set_code="MOCK",
@@ -143,7 +170,7 @@ def test_build_snapshot_computes_counts_and_incomplete_list(mock_cards: list[dic
         expected_counts=expected_counts,
         source_commit="deadbeef",
     )
-    assert len(snapshot.cards) == 5
+    assert len(snapshot.cards) == 6
     assert snapshot.integrity.counts_match is True
     assert snapshot.integrity.incomplete_cards == ["fixture-mysterious-relic-none"]
 

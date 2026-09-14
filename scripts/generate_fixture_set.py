@@ -71,7 +71,9 @@ def _next_number() -> str:
     return f"FIXTURE{_counter:03d}"
 
 
-def _deck_card(rarity: str, index: int, *, draftable: bool) -> Card:
+def _deck_card(
+    rarity: str, index: int, *, draftable: bool, is_expansion_slot: bool = False
+) -> Card:
     archetype = ARCHETYPES[index % len(ARCHETYPES)]
     pitch = (index % 3) + 1
     name = f"Fixture {rarity} Card {index:03d}"
@@ -105,6 +107,7 @@ def _deck_card(rarity: str, index: int, *, draftable: bool) -> Card:
         image_url=None,
         double_faced_with=None,
         draftable=draftable,
+        is_expansion_slot=is_expansion_slot,
         data_complete=True,
     )
 
@@ -118,7 +121,7 @@ def build_generic_deck_cards() -> list[Card]:
     for i in range(MAJESTIC_CORE):
         cards.append(_deck_card("M", i, draftable=True))
     for i in range(MAJESTIC_CORE, MAJESTIC_CORE + MAJESTIC_EXPANSION):
-        cards.append(_deck_card("M", i, draftable=False))
+        cards.append(_deck_card("M", i, draftable=False, is_expansion_slot=True))
     for i in range(RARITY_COUNTS["L"]):
         cards.append(_deck_card("L", i, draftable=False))
     for i in range(RARITY_COUNTS["V"]):
@@ -162,6 +165,7 @@ def build_heroes() -> list[Card]:
                 image_url=None,
                 double_faced_with=None,
                 draftable=False,
+                is_expansion_slot=False,
                 data_complete=True,
             )
         )
@@ -192,6 +196,7 @@ def build_heroes() -> list[Card]:
                 image_url=None,
                 double_faced_with=None,
                 draftable=False,
+                is_expansion_slot=False,
                 data_complete=True,
             )
         )
@@ -222,6 +227,7 @@ def build_heroes() -> list[Card]:
                 image_url=None,
                 double_faced_with=None,
                 draftable=False,
+                is_expansion_slot=False,
                 data_complete=True,
             )
         )
@@ -255,6 +261,7 @@ def build_heroes() -> list[Card]:
                 image_url=None,
                 double_faced_with=None,
                 draftable=False,
+                is_expansion_slot=False,
                 data_complete=True,
             )
         )

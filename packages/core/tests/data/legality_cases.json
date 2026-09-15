@@ -1,0 +1,229 @@
+{
+  "_comment": "Hand-checked card_playable_by cases (plan section 6.3, WP-06) for IAR's three draft heroes (plan S10, confirmed against real Card Vault data: Levia/Brute, Malice/Necromancer, 'Viserai, Between Worlds'/Runeblade, all Shadow-talent). Card names below are fictional (never real LSS card text); hero names/classes/talents are the real, grounded facts. See docs/status/WP-06.md.",
+  "heroes": {
+    "levia": { "name": "Levia", "classes": ["Brute"], "talents": ["Shadow"] },
+    "malice": { "name": "Malice", "classes": ["Necromancer"], "talents": ["Shadow"] },
+    "viserai": {
+      "name": "Viserai, Between Worlds",
+      "classes": ["Runeblade"],
+      "talents": ["Shadow"]
+    }
+  },
+  "banned_in_limited": ["banned-test-card-red"],
+  "cases": [
+    {
+      "description": "Generic card (no classes/talents) is always legal - CR 2.14.1a",
+      "hero": "levia",
+      "card": { "uid": "generic-action-red", "classes": [], "talents": [] },
+      "expected": true
+    },
+    {
+      "description": "Levia's own class (Brute), no talent, is legal - CR 1.1.3 subset rule",
+      "hero": "levia",
+      "card": { "uid": "brute-action-red", "classes": ["Brute"], "talents": [] },
+      "expected": true
+    },
+    {
+      "description": "Shadow talent, no class, is legal for the Shadow hero Levia",
+      "hero": "levia",
+      "card": { "uid": "shadow-action-red", "classes": [], "talents": ["Shadow"] },
+      "expected": true
+    },
+    {
+      "description": "Brute + Shadow (hero's exact class and talent) is legal",
+      "hero": "levia",
+      "card": { "uid": "brute-shadow-action-red", "classes": ["Brute"], "talents": ["Shadow"] },
+      "expected": true
+    },
+    {
+      "description": "Brute + Chaos is illegal for Levia (Shadow Brute) - plan section 6.3's own example: 'not a Chaos Brute card'",
+      "hero": "levia",
+      "card": { "uid": "brute-chaos-action-red", "classes": ["Brute"], "talents": ["Chaos"] },
+      "expected": false
+    },
+    {
+      "description": "Wrong class alone (Ninja) is illegal for Levia (Brute)",
+      "hero": "levia",
+      "card": { "uid": "ninja-action-red", "classes": ["Ninja"], "talents": [] },
+      "expected": false
+    },
+    {
+      "description": "Wrong talent alone (Light) is illegal for Levia (Shadow)",
+      "hero": "levia",
+      "card": { "uid": "light-action-red", "classes": [], "talents": ["Light"] },
+      "expected": false
+    },
+    {
+      "description": "Levia Specialization card is legal for Levia (moniker match, single-word name)",
+      "hero": "levia",
+      "card": {
+        "uid": "levia-signature-red",
+        "classes": [],
+        "talents": ["Shadow"],
+        "specialization": "Levia"
+      },
+      "expected": true
+    },
+    {
+      "description": "Viserai Specialization card is illegal for Levia (moniker mismatch)",
+      "hero": "levia",
+      "card": {
+        "uid": "viserai-signature-red",
+        "classes": [],
+        "talents": ["Shadow"],
+        "specialization": "Viserai"
+      },
+      "expected": false
+    },
+    {
+      "description": "A banned-in-limited card is illegal even though otherwise legal for Levia",
+      "hero": "levia",
+      "card": { "uid": "banned-test-card-red", "classes": [], "talents": ["Shadow"] },
+      "expected": false
+    },
+    {
+      "description": "Generic card is always legal for Malice too",
+      "hero": "malice",
+      "card": { "uid": "generic-action-yellow", "classes": [], "talents": [] },
+      "expected": true
+    },
+    {
+      "description": "Malice's own class (Necromancer), no talent, is legal",
+      "hero": "malice",
+      "card": { "uid": "necromancer-action-yellow", "classes": ["Necromancer"], "talents": [] },
+      "expected": true
+    },
+    {
+      "description": "Shadow talent alone is legal for Malice (Shadow)",
+      "hero": "malice",
+      "card": { "uid": "shadow-action-yellow", "classes": [], "talents": ["Shadow"] },
+      "expected": true
+    },
+    {
+      "description": "Necromancer + Shadow (exact match) is legal",
+      "hero": "malice",
+      "card": {
+        "uid": "necromancer-shadow-action-yellow",
+        "classes": ["Necromancer"],
+        "talents": ["Shadow"]
+      },
+      "expected": true
+    },
+    {
+      "description": "Necromancer + Chaos is illegal for Malice (talent mismatch, same shape as the plan's Chaos Brute example)",
+      "hero": "malice",
+      "card": {
+        "uid": "necromancer-chaos-action-yellow",
+        "classes": ["Necromancer"],
+        "talents": ["Chaos"]
+      },
+      "expected": false
+    },
+    {
+      "description": "Wrong class alone (Runeblade) is illegal for Malice (Necromancer)",
+      "hero": "malice",
+      "card": { "uid": "runeblade-action-yellow", "classes": ["Runeblade"], "talents": [] },
+      "expected": false
+    },
+    {
+      "description": "Wrong talent alone (Light) is illegal for Malice (Shadow)",
+      "hero": "malice",
+      "card": { "uid": "light-action-yellow", "classes": [], "talents": ["Light"] },
+      "expected": false
+    },
+    {
+      "description": "Malice Specialization card is legal for Malice",
+      "hero": "malice",
+      "card": {
+        "uid": "malice-signature-yellow",
+        "classes": [],
+        "talents": ["Shadow"],
+        "specialization": "Malice"
+      },
+      "expected": true
+    },
+    {
+      "description": "Levia Specialization card is illegal for Malice",
+      "hero": "malice",
+      "card": {
+        "uid": "levia-signature-yellow",
+        "classes": [],
+        "talents": ["Shadow"],
+        "specialization": "Levia"
+      },
+      "expected": false
+    },
+    {
+      "description": "Generic card is always legal for Viserai too",
+      "hero": "viserai",
+      "card": { "uid": "generic-action-blue", "classes": [], "talents": [] },
+      "expected": true
+    },
+    {
+      "description": "Viserai's own class (Runeblade), no talent, is legal",
+      "hero": "viserai",
+      "card": { "uid": "runeblade-action-blue", "classes": ["Runeblade"], "talents": [] },
+      "expected": true
+    },
+    {
+      "description": "Shadow talent alone is legal for Viserai (Shadow)",
+      "hero": "viserai",
+      "card": { "uid": "shadow-action-blue", "classes": [], "talents": ["Shadow"] },
+      "expected": true
+    },
+    {
+      "description": "Runeblade + Shadow (exact match) is legal",
+      "hero": "viserai",
+      "card": {
+        "uid": "runeblade-shadow-action-blue",
+        "classes": ["Runeblade"],
+        "talents": ["Shadow"]
+      },
+      "expected": true
+    },
+    {
+      "description": "Runeblade + Chaos is illegal for Viserai (talent mismatch)",
+      "hero": "viserai",
+      "card": {
+        "uid": "runeblade-chaos-action-blue",
+        "classes": ["Runeblade"],
+        "talents": ["Chaos"]
+      },
+      "expected": false
+    },
+    {
+      "description": "Wrong class alone (Brute) is illegal for Viserai (Runeblade)",
+      "hero": "viserai",
+      "card": { "uid": "brute-action-blue", "classes": ["Brute"], "talents": [] },
+      "expected": false
+    },
+    {
+      "description": "Wrong talent alone (Light) is illegal for Viserai (Shadow)",
+      "hero": "viserai",
+      "card": { "uid": "light-action-blue", "classes": [], "talents": ["Light"] },
+      "expected": false
+    },
+    {
+      "description": "Viserai Specialization card matches by moniker even though the hero's full name has a comma-suffix ('Viserai, Between Worlds') - CR 2.7.3",
+      "hero": "viserai",
+      "card": {
+        "uid": "viserai-signature-blue",
+        "classes": [],
+        "talents": ["Shadow"],
+        "specialization": "Viserai"
+      },
+      "expected": true
+    },
+    {
+      "description": "Malice Specialization card is illegal for Viserai",
+      "hero": "viserai",
+      "card": {
+        "uid": "malice-signature-blue",
+        "classes": [],
+        "talents": ["Shadow"],
+        "specialization": "Malice"
+      },
+      "expected": false
+    }
+  ]
+}

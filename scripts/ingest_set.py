@@ -74,43 +74,50 @@ RARITY_MAP: dict[str, str] = {
 # --- Class / talent classification ------------------------------------------
 #
 # The upstream schema has no separate classes/talents fields (confirmed via
-# the card-schema doc) - they must be derived from `types`. This list is
-# best-effort general FaB game knowledge, NOT sourced from a machine-readable
-# spec, and must be reconciled against the official IAR hero list
-# (plan S10: Levia/Brute, Malice/Necromancer, Viserai/Runeblade, all Shadow)
-# before being trusted for anything beyond the fixture set. A card whose type
-# line contains a token this script cannot classify is marked
-# data_complete=False rather than silently miscategorized.
+# the card-schema doc) - they must be derived from `types`. These two lists
+# are now sourced directly from the Comprehensive Rules (docs/sources/en-fab-cr.txt,
+# not committed - see docs/status/WP-06.md), not guessed:
+#   CR 2.11.6a: "The class supertype keywords are Adjudicator, Assassin,
+#   Bard, Brute, Guardian, Illusionist, Mechanologist, Merchant,
+#   Necromancer, Ninja, Pirate, Ranger, Runeblade, Shapeshifter, Thief,
+#   Warrior, and Wizard."
+#   CR 2.11.6b: "The talent supertype keywords are Chaos, Draconic, Earth,
+#   Elemental, Ice, Light, Lightning, Mystic, Revered, Reviled, Royal, and
+#   Shadow."
+# A card whose type line contains a token this script cannot classify is
+# marked data_complete=False rather than silently miscategorized.
 KNOWN_CLASSES: set[str] = {
+    "Adjudicator",
     "Assassin",
+    "Bard",
     "Brute",
     "Guardian",
     "Illusionist",
     "Mechanologist",
     "Merchant",
+    "Necromancer",
     "Ninja",
+    "Pirate",
     "Ranger",
     "Runeblade",
     "Shapeshifter",
+    "Thief",
     "Warrior",
     "Wizard",
-    "Necromancer",
-    "Bard",
-    "Pirate",
-    "Adjudicator",
 }
 KNOWN_TALENTS: set[str] = {
-    "Light",
-    "Shadow",
     "Chaos",
-    "Elemental",
-    "Mystic",
-    "Royal",
     "Draconic",
-    "Xenan",
-    "Ice",
     "Earth",
+    "Elemental",
+    "Ice",
+    "Light",
     "Lightning",
+    "Mystic",
+    "Revered",
+    "Reviled",
+    "Royal",
+    "Shadow",
 }
 # Types that are structural (not a class, talent, or subtype worth keeping
 # verbatim) and should just be dropped from `subtypes`. Equipment/weapon

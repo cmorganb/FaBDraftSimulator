@@ -13,7 +13,7 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 | WP-03 | Contracts + codegen | WP-00 | DONE | [WP-03.md](./WP-03.md) |
 | WP-04 | Seeded RNG + event store | WP-03 | DONE | [WP-04.md](./WP-04.md) |
 | WP-05 | Pack generator | WP-02, WP-04 | DONE | [WP-05.md](./WP-05.md) |
-| WP-06 | Card model, indexes, legality | WP-02 | NOT STARTED | - |
+| WP-06 | Card model, indexes, legality | WP-02 | DONE | [WP-06.md](./WP-06.md) |
 | WP-07 | Draft state machine | WP-04, WP-05 | NOT STARTED | - |
 | WP-08 | Information policy enforcement | WP-07 | NOT STARTED | - |
 | WP-09 | Deck build + validation | WP-06, WP-07 | NOT STARTED | - |
@@ -37,8 +37,15 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 
 ## Notes for the next agent
 
-- WP-06 (card model/legality) is unblocked and can proceed now. WP-07
-  (draft state machine) is unblocked too (WP-04 + WP-05 both done).
+- WP-07 (draft state machine) is unblocked (WP-04 + WP-05 both done) and is
+  the natural next pick - it's the last dependency both WP-08 and WP-09
+  (which also needs WP-06, now done) are waiting on.
+- `docs/sources/en-fab-{cr,trp}.txt` (full Comprehensive Rules / Tournament
+  Rules text, kept locally by the user, not committed - see memory
+  `rules-text-sources`) are the authoritative source for `# CR`/`# TRP`
+  citations. Grep them before guessing at a rule number or a keyword list
+  (class/talent supertypes, keyword ability wording, etc.) - WP-06 found
+  and fixed a wrong hand-derived class/talent list this way.
 - `Card` gained two required fields during WP-05: `is_expansion_slot: bool`
   and `object_type: enum["deck","arena","hero","token"]` (see
   `docs/status/WP-03.md`'s amendment notes) - any new Card-constructing test

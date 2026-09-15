@@ -1,7 +1,7 @@
 # FaBDraftSimulator: Technical Plan and Work Breakdown
 
 **Project:** Flesh and Blood TCG Draft Simulator for *Usurp the Shadow Throne* (set code **IAR**)
-**Document version:** 1.0
+**Document version:** 1.1 (see section 6.2 correction, 2026-09-14: removed a false invariant that contradicted the Wheel glossary entry)
 **Date:** 2026-09-14
 **Audience:** Sonnet 5 implementation agents (autonomous or semi-autonomous coding agents)
 **Status:** Ready for Phase 0 execution. Sections marked `VERIFY` must be resolved before the affected work package is marked done.
@@ -472,8 +472,8 @@ POOL_FINALIZED
 
 Invariants (assert in code, not only in tests):
 
-- Every draftable card is picked exactly once; `sum(len(pool[s])) == 336` at `POOL_FINALIZED`; `len(pool[s]) == 42` for all seats.
-- A seat never receives the same pack twice within a round.
+- Every pack's own draftable cards are picked exactly once across its lineage (the 14 draftable cards opened into one physical pack are each picked exactly once, by whichever seat holds that pack at the time, as it circulates); `sum(len(pool[s])) == 336` at `POOL_FINALIZED`; `len(pool[s]) == 42` for all seats. Note this is a per-pack conservation law, not a claim that a given card *uid* is drafted only once pod-wide: independent packs are sampled from the same rarity pool (6.1), so the same Common, for instance, can legitimately appear in more than one pack, the same way a real print run supplies many boosters with the same card.
+- With an 8-seat pod and 14 picks per round, a seat *does* receive the same pack back after it has passed around the whole pod once (see the Wheel glossary entry, Appendix A): picks 9 to 14 wheel back through the packs first seen at picks 1 to 6. "A seat never receives the same pack twice within a round" is **not** an invariant of this format and must not be asserted; do not "fix" wheeling to make that false statement true.
 - Pack sizes seen by each seat within a round are exactly `{14,13,...,1}`.
 - No event ever contains another seat's pool.
 

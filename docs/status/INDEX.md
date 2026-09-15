@@ -18,7 +18,7 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 | WP-08 | Information policy enforcement | WP-07 | DONE | [WP-08.md](./WP-08.md) |
 | WP-09 | Deck build + validation | WP-06, WP-07 | DONE | [WP-09.md](./WP-09.md) |
 | WP-10 | Pool and deck metrics + IAR tags | WP-09 | NOT STARTED | - |
-| WP-11 | Log writers | WP-07, WP-09 | IN PROGRESS (2026-09-14) | - |
+| WP-11 | Log writers | WP-07, WP-09 | DONE | [WP-11.md](./WP-11.md) |
 | WP-12 | Replay | WP-11 | NOT STARTED | - |
 | WP-13 | Exports | WP-09 | NOT STARTED | - |
 | WP-14 | Agent protocol + human adapter | WP-08 | NOT STARTED | - |
@@ -95,3 +95,11 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 - The-fab-cube (the *other* ingestion path, `scripts/ingest_set.py`) still
   has no real IAR data as of last check - Card Vault
   (`scripts/ingest_cardvault.py`) is the working real-data source.
+- WP-11 is done: `fabdraft_core.logs.{markdown,session}` render
+  `draft_log.md`/`session.json` from a real event log (see
+  `docs/status/WP-11.md`). No deck-build orchestrator exists yet, so the
+  "Deck build" section of every real log renders a `_Pending` marker until
+  something (WP-18, most likely) emits `HERO_SELECTED`/`DECK_CARD_ADDED`/
+  `DECK_CARD_REMOVED`/`DECK_SUBMITTED`/`VALIDATION_RESULT` events. Also:
+  WP-07's events have no per-pick `time_used_ms` (only a pod-wide
+  per-window clock advance) - flagged as a known limitation, not fixed here.

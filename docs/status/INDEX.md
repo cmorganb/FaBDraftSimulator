@@ -19,7 +19,7 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 | WP-09 | Deck build + validation | WP-06, WP-07 | DONE | [WP-09.md](./WP-09.md) |
 | WP-10 | Pool and deck metrics + IAR tags | WP-09 | DONE | [WP-10.md](./WP-10.md) |
 | WP-11 | Log writers | WP-07, WP-09 | DONE | [WP-11.md](./WP-11.md) |
-| WP-12 | Replay | WP-11 | IN PROGRESS (2026-09-14) | - |
+| WP-12 | Replay | WP-11 | DONE | [WP-12.md](WP-12.md) |
 | WP-13 | Exports | WP-09 | IN PROGRESS (2026-09-14) | - |
 | WP-14 | Agent protocol + human adapter | WP-08 | IN PROGRESS (2026-09-14) | - |
 | WP-15 | Heuristic agent | WP-14, WP-10 | NOT STARTED | - |

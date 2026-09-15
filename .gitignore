@@ -24,10 +24,14 @@ apps/web/.vite/
 # Generated / contract codegen output is committed intentionally;
 # only build caches are ignored above.
 
-# Licensed card data and images: never committed (plan section 11, IP)
-data/sets/**
-!data/sets/.gitkeep
-data/images/
+# Licensed card data and images: never committed (plan section 11, IP).
+# Allowlist approach so any *new* per-set data directory (data/IAR/,
+# data/sets/, data/images/, a future data/<SET>/, etc.) is gitignored by
+# default without needing a new rule added every time one shows up - only
+# the checked-in synthetic/config directories are un-ignored explicitly.
+data/*
+!data/config
+!data/fixtures
 runs/
 
 # IDE

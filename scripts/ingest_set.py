@@ -202,16 +202,36 @@ def derive_equipment(types: list[str]) -> tuple[str | None, int | None]:
 
 
 _DRAFTABLE_RARITIES = {"C", "R"}  # plan section 5.4: common/rare slots are always draftable
+_ARENA_TYPE_TOKENS = {"Weapon", "Head", "Chest", "Arms", "Legs"}
 
 
-def default_draftable(rarity: str, is_expansion_slot: bool) -> bool:
+def classify_object_type(types: list[str]) -> str:
+    """deck/arena/hero/token, mirroring the real card database's own
+    object_type (see docs/status/WP-05.md's amendment for why this matters:
+    a hero or token must never appear in a pack regardless of its rarity,
+    which `is_arena_card`/`is_deck_card` alone can't express).
+    """
+    type_set = set(types)
+    if "Hero" in type_set:
+        return "hero"
+    if "Token" in type_set:
+        return "token"
+    if type_set & _ARENA_TYPE_TOKENS:
+        return "arena"
+    return "deck"
+
+
+def default_draftable(rarity: str, is_expansion_slot: bool, object_type: str = "deck") -> bool:
     """A best-effort default per plan section 5.4's pack slot design: common
     and rare are always draftable; a core Majestic is draftable, an
     expansion-slot one is not (S13); Basic/Legendary/Marvel/Fabled only ever
-    appear in non-draftable slots. The pack generator (WP-05) still computes
-    the *actual* draftability of a drafted instance from the slot it came
-    from - this is just a sane default for the static Card record.
+    appear in non-draftable slots; a hero or token is never draftable
+    regardless of rarity. The pack generator (WP-05) still computes the
+    *actual* draftability of a drafted instance from the slot it came from -
+    this is just a sane default for the static Card record.
     """
+    if object_type in ("hero", "token"):
+        return False
     if rarity in _DRAFTABLE_RARITIES:
         return True
     if rarity == "M":
@@ -255,7 +275,7 @@ def map_card(raw_card: dict[str, Any], printing: dict[str, Any], set_code: str) 
         | set(raw_card.get("ability_and_effect_keywords") or [])
     )
 
-    is_arena_card = bool({"Hero", "Weapon", "Head", "Chest", "Arms", "Legs"} & set(types))
+    object_type = classify_object_type(types)
     is_expansion_slot = bool(printing.get("expansion_slot", False))
 
     data_complete = fully_classified
@@ -265,7 +285,7 @@ def map_card(raw_card: dict[str, Any], printing: dict[str, Any], set_code: str) 
         set_code=set_code,
         card_number=card_number,
         name=name,
-        pitch=pitch,  # type: ignore[arg-type]
+        pitch=pitch,
         rarity=rarity,  # type: ignore[arg-type]
         types=types,
         classes=classes,
@@ -279,14 +299,16 @@ def map_card(raw_card: dict[str, Any], printing: dict[str, Any], set_code: str) 
         keywords=keywords,
         functional_text=functional_text,
         specialization=specialization,
-        is_deck_card=not is_arena_card,
-        is_arena_card=is_arena_card,
+        object_type=object_type,  # type: ignore[arg-type]
+        is_deck_card=object_type == "deck",
+        is_arena_card=object_type == "arena",
         equipment_slot=equipment_slot,  # type: ignore[arg-type]
         hands=hands,  # type: ignore[arg-type]
         image_url=printing.get("image_url"),
-        double_faced_with=None,  # DFC presence is a VERIFY item for IAR (plan D11/R5); no
-        # data to derive it from yet, so this is intentionally left unset rather than guessed.
-        draftable=default_draftable(rarity, is_expansion_slot),
+        double_faced_with=None,  # DFC presence is a VERIFY item for IAR (plan D11/R5); resolved
+        # against real Card Vault data - see scripts/ingest_cardvault.py module docstring. This
+        # dataset has no signal to derive it from, so left unset rather than guessed.
+        draftable=default_draftable(rarity, is_expansion_slot, object_type),
         is_expansion_slot=is_expansion_slot,
         data_complete=data_complete,
     )

@@ -49,13 +49,36 @@ class Pack:
         return [c for c in self.cards if c.draftable]
 
 
+def is_pack_eligible(card: Card) -> bool:
+    """Can this card physically appear in ANY booster pack slot at all
+    (including the non-draftable "basic"/"chase" slots)?
+
+    Confirmed against real IAR data (docs/status/WP-05.md amendment):
+      - A hero or token (`object_type`) is never pack-eligible regardless
+        of its own rarity - real IAR's pre-release-only hero Baalghor is
+        Marvel rarity but, being a hero, still never appears in a pack; a
+        token is a gameplay artifact, never a pack/pool member.
+      - A Basic-rarity *arena* card (a young hero's own dedicated weapon or
+        arm-equipment, plan S10) is never pack-eligible either - it's
+        simply handed out, not printed into boosters at all.
+      - A Basic-rarity *deck* card is still pack-eligible: real IAR packs
+        physically contain 2 Basic-rarity deck-card slots ("basic" and
+        part of "chase", S7) even though neither is draftable (D5) - this
+        is what lets `index_by_rarity` build a non-empty "B" pool for
+        those slots to draw from. Any other rarity is always eligible.
+    """
+    if card.object_type in ("hero", "token"):
+        return False
+    return not (card.object_type == "arena" and card.rarity == "B")
+
+
 def index_by_rarity(cards: list[Card]) -> dict[str, list[Card]]:
-    """Indexes deck-legal cards (excluding heroes/weapons/equipment - plan
-    section 6.1: "excluding heroes/tokens per format config") by rarity.
+    """Indexes pack-eligible cards (plan section 6.1: "excluding
+    heroes/tokens per format config") by rarity.
     """
     index: dict[str, list[Card]] = {}
     for card in cards:
-        if not card.is_deck_card:
+        if not is_pack_eligible(card):
             continue
         index.setdefault(card.rarity, []).append(card)
     return index
@@ -69,7 +92,7 @@ def _pool_for_rarity_key(
     rarity_key: str,
     *,
     pool_by_rarity: dict[str, list[Card]],
-    all_deck_cards: list[Card],
+    all_pack_eligible_cards: list[Card],
     slot: Slot,
 ) -> list[Card]:
     """Candidate cards for one weighted-choice draw within a slot. Handles
@@ -83,7 +106,7 @@ def _pool_for_rarity_key(
         # This slot's whole distribution is already flagged `confidence:
         # ESTIMATED` in pack_config - this is a deliberate simplification,
         # not a guess at unavailable data.
-        return all_deck_cards
+        return all_pack_eligible_cards
     if rarity_key not in _PLAIN_RARITIES:
         raise PackGenerationError(
             f"slot {slot.id!r}: unrecognized rarity key {rarity_key!r} in its "
@@ -110,7 +133,7 @@ def generate_pack(cards: list[Card], pack_config: PackConfig, rng: SeededRng) ->
     `cards` is a set snapshot's full card list (e.g. `snapshot.cards`).
     """
     pool_by_rarity = index_by_rarity(cards)
-    all_deck_cards = [c for c in cards if c.is_deck_card]
+    all_pack_eligible_cards = [c for c in cards if is_pack_eligible(c)]
     picked: list[PackedCard] = []
     picked_uids: set[str] = set()
 
@@ -121,7 +144,7 @@ def generate_pack(cards: list[Card], pack_config: PackConfig, rng: SeededRng) ->
             candidates = _pool_for_rarity_key(
                 rarity_key,
                 pool_by_rarity=pool_by_rarity,
-                all_deck_cards=all_deck_cards,
+                all_pack_eligible_cards=all_pack_eligible_cards,
                 slot=slot,
             )
             if pack_config.no_duplicate_uids_within_pack:

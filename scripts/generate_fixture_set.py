@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Generate a synthetic 263-card* fixture set with the same shape as IAR
-(plan section 2.5, WP-01), so every downstream WP can develop and test
-against `FIXTURE` with zero dependency on real (unreleased, IP-restricted)
-card data.
+"""Generate a synthetic 262-card fixture set with the same shape as the real
+IAR set (plan section 2.5, WP-01), so every downstream WP can develop and
+test against `FIXTURE` with zero dependency on real (unreleased-at-plan-
+time, IP-restricted) card data.
 
-* See docs/status/WP-01.md and docs/status/BLOCKED.md: plan section 2.4's S3
-("Set size: 263 cards") does not match the sum of S4's own rarity split
-(2+27+5+40+66+133+16 = 289, not 263). This generator matches the
-itemized, internally-consistent S4 breakdown (total 289) rather than the
-S3 headline figure, and flags the discrepancy for human resolution against
-the official IAR product page rather than silently picking one number.
+Rarity counts below are the *real*, confirmed IAR numbers (from a Card Vault
+export ingested via scripts/ingest_cardvault.py, see docs/status/WP-05.md's
+amendment) - not the plan's own section 2.4 S4 table, which is now known to
+be wrong: it overstated Marvel (27 vs. real 3) and Basic (16 vs. real 14),
+and slightly overstated Legendary (5 vs. real 4). See docs/status/BLOCKED.md
+for the full resolution of that discrepancy.
 
 Usage:
     uv run python scripts/generate_fixture_set.py
@@ -29,23 +29,19 @@ CONFIG_DIR = REPO_ROOT / "data" / "config"
 
 SET_CODE = "FIXTURE"
 
-# Matches plan section 2.4 S4's itemized rarity split (see module docstring
-# re: the S3/S4 total mismatch).
+# Real IAR rarity split, confirmed 2026-09-14 against a Card Vault export
+# (data/IAR/manifest.json, gitignored - see scripts/ingest_cardvault.py).
 RARITY_COUNTS: dict[str, int] = {
     "F": 2,
-    "V": 27,
-    "L": 5,
+    "V": 3,
+    "L": 4,
     "M": 40,  # 20 core (draftable) + 20 expansion (non-draftable extra slot, S13)
     "R": 66,
     "C": 133,
-    "B": 16,  # includes 3 heroes + 3 weapons + 3 arm equipment, see build_heroes()
+    "B": 14,  # 3 heroes + 3 weapons + 3 arm equipment + 5 generic basics
 }
 MAJESTIC_CORE = 20
 MAJESTIC_EXPANSION = 20
-
-# Draftable-by-rarity, mirroring plan section 5.4's slot design (WP-05 will
-# recompute this dynamically per pack; this is the static default).
-NON_DRAFTABLE_RARITIES = {"B", "V", "F"}  # L and M(expansion) handled per-card below
 
 FIXTURE_HEROES: list[dict[str, Any]] = [
     {"name": "Fixture Hero Brute", "classes": ["Brute"]},
@@ -72,37 +68,52 @@ def _next_number() -> str:
 
 
 def _deck_card(
-    rarity: str, index: int, *, draftable: bool, is_expansion_slot: bool = False
+    rarity: str,
+    index: int,
+    *,
+    draftable: bool,
+    is_expansion_slot: bool = False,
+    object_type: str = "deck",
 ) -> Card:
+    """A normal deck card, or (when `object_type="arena"`) an illustrative
+    non-Basic-rarity equipment piece - real IAR data shows equipment isn't
+    always Basic rarity/excluded from packs, only the young heroes' own
+    dedicated weapon+arm-equipment is (see fabdraft_core.packs.generator.
+    is_pack_eligible and docs/status/WP-05.md's amendment).
+    """
     archetype = ARCHETYPES[index % len(ARCHETYPES)]
-    pitch = (index % 3) + 1
-    name = f"Fixture {rarity} Card {index:03d}"
-    keywords = ["Blood Debt"] if index % 7 == 0 else []
-    types = ["Action", "Attack"] if index % 2 == 0 else ["Action"]
+    is_arena = object_type == "arena"
+    pitch = None if is_arena else (index % 3) + 1
+    name = f"Fixture {rarity} {'Equipment' if is_arena else 'Card'} {index:03d}"
+    keywords = [] if is_arena else (["Blood Debt"] if index % 7 == 0 else [])
+    types = ["Equipment"] if is_arena else (["Action", "Attack"] if index % 2 == 0 else ["Action"])
     return Card(
-        uid=f"fixture-{rarity.lower()}-card-{index:03d}-{pitch}",
+        uid=f"fixture-{rarity.lower()}-{'equip' if is_arena else 'card'}-{index:03d}",
         set_code=SET_CODE,
         card_number=_next_number(),
         name=name,
-        pitch=pitch,  # type: ignore[arg-type]
+        pitch=pitch,
         rarity=rarity,  # type: ignore[arg-type]
         types=types,
-        classes=archetype["classes"],
-        talents=archetype["talents"],
-        subtypes=[],
-        cost=index % 4,
-        power=2 + (index % 5),
-        defense=1 + (index % 4),
+        classes=[] if is_arena else archetype["classes"],
+        talents=[] if is_arena else archetype["talents"],
+        subtypes=["Arms"] if is_arena else [],
+        cost=None if is_arena else index % 4,
+        power=None if is_arena else 2 + (index % 5),
+        defense=1 if is_arena else 1 + (index % 4),
         life=None,
         intellect=None,
         keywords=keywords,
         functional_text=(
-            "When this hits, create a Gate to i'Arathael token." if index % 11 == 0 else ""
+            "When this hits, create a Gate to i'Arathael token."
+            if (not is_arena and index % 11 == 0)
+            else ""
         ),
         specialization=None,
-        is_deck_card=True,
-        is_arena_card=False,
-        equipment_slot=None,
+        object_type=object_type,  # type: ignore[arg-type]
+        is_deck_card=not is_arena,
+        is_arena_card=is_arena,
+        equipment_slot="arms" if is_arena else None,
         hands=None,
         image_url=None,
         double_faced_with=None,
@@ -114,16 +125,26 @@ def _deck_card(
 
 def build_generic_deck_cards() -> list[Card]:
     cards: list[Card] = []
-    for i in range(RARITY_COUNTS["C"]):
+    # Commons: all generic deck cards except one illustrative Common
+    # equipment piece (pack-eligible, unlike the Basic-rarity hero gear).
+    for i in range(RARITY_COUNTS["C"] - 1):
         cards.append(_deck_card("C", i, draftable=True))
+    cards.append(_deck_card("C", RARITY_COUNTS["C"] - 1, draftable=True, object_type="arena"))
+
     for i in range(RARITY_COUNTS["R"]):
         cards.append(_deck_card("R", i, draftable=True))
     for i in range(MAJESTIC_CORE):
         cards.append(_deck_card("M", i, draftable=True))
     for i in range(MAJESTIC_CORE, MAJESTIC_CORE + MAJESTIC_EXPANSION):
         cards.append(_deck_card("M", i, draftable=False, is_expansion_slot=True))
-    for i in range(RARITY_COUNTS["L"]):
+
+    # Legendary: same idea - one illustrative Legendary equipment piece,
+    # still non-draftable (chase-slot only) but via the L rarity, not
+    # because it's an arena card.
+    for i in range(RARITY_COUNTS["L"] - 1):
         cards.append(_deck_card("L", i, draftable=False))
+    cards.append(_deck_card("L", RARITY_COUNTS["L"] - 1, draftable=False, object_type="arena"))
+
     for i in range(RARITY_COUNTS["V"]):
         cards.append(_deck_card("V", i, draftable=False))
     for i in range(RARITY_COUNTS["F"]):
@@ -132,8 +153,10 @@ def build_generic_deck_cards() -> list[Card]:
 
 
 def build_heroes() -> list[Card]:
-    """3 young heroes + their basic weapon + basic arm equipment (plan S10),
-    plus generic basics to fill out the Basic-rarity count (16).
+    """3 young heroes (object_type="hero", never pack-eligible regardless of
+    rarity) + their Basic-rarity weapon + arm equipment (object_type="arena",
+    plan S10), plus generic Basic deck cards to fill out the Basic-rarity
+    count.
     """
     cards: list[Card] = []
     for hero in FIXTURE_HEROES:
@@ -158,8 +181,9 @@ def build_heroes() -> list[Card]:
                 keywords=[],
                 functional_text="",
                 specialization=None,
+                object_type="hero",
                 is_deck_card=False,
-                is_arena_card=True,
+                is_arena_card=False,
                 equipment_slot=None,
                 hands=None,
                 image_url=None,
@@ -189,6 +213,7 @@ def build_heroes() -> list[Card]:
                 keywords=[],
                 functional_text="",
                 specialization=hero["name"],
+                object_type="arena",
                 is_deck_card=False,
                 is_arena_card=True,
                 equipment_slot=None,
@@ -220,6 +245,7 @@ def build_heroes() -> list[Card]:
                 keywords=[],
                 functional_text="",
                 specialization=hero["name"],
+                object_type="arena",
                 is_deck_card=False,
                 is_arena_card=True,
                 equipment_slot="arms",
@@ -254,6 +280,7 @@ def build_heroes() -> list[Card]:
                 keywords=[],
                 functional_text="",
                 specialization=None,
+                object_type="deck",
                 is_deck_card=True,
                 is_arena_card=False,
                 equipment_slot=None,
@@ -276,7 +303,7 @@ def build_fixture_set() -> SetSnapshot:
 
     return SetSnapshot(
         set_code=SET_CODE,
-        name="Fixture Set (synthetic, shaped like IAR)",
+        name="Fixture Set (synthetic, shaped like the real IAR set)",
         release_date="1970-01-01",  # type: ignore[arg-type]
         source={  # type: ignore[arg-type]
             "provider": "synthetic",

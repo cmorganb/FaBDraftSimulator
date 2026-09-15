@@ -30,6 +30,7 @@ def test_card_model_round_trips_a_minimal_instance() -> None:
         "keywords": [],
         "functional_text": "",
         "specialization": None,
+        "object_type": "deck",
         "is_deck_card": True,
         "is_arena_card": False,
         "equipment_slot": None,

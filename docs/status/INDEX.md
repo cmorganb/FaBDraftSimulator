@@ -39,19 +39,31 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 
 - WP-06 (card model/legality) is unblocked and can proceed now. WP-07
   (draft state machine) is unblocked too (WP-04 + WP-05 both done).
-- `Card` gained a required `is_expansion_slot: bool` field during WP-05
-  (see its status doc's amendment note) - any new Card-constructing test
-  or script must include it.
+- `Card` gained two required fields during WP-05: `is_expansion_slot: bool`
+  and `object_type: enum["deck","arena","hero","token"]` (see
+  `docs/status/WP-03.md`'s amendment notes) - any new Card-constructing test
+  or script must include both.
 - `apps/web` is an empty placeholder (no `package.json`) - the environment
   this repo was scaffolded in has no working `npm`. Confirm npm works before
   claiming WP-19+. See `docs/decisions/ADR-0001-uv-workspace-and-deferred-web-tooling.md`.
-- Real IAR card data is not yet published upstream (checked
-  2026-09-14, the-fab-cube dataset has only a placeholder `IAR` set entry).
-  `data/fixtures/fixture_set.json` (set code `FIXTURE`, 289 cards) is the
-  only working data source; do not build against an assumption that
-  `data/sets/IAR.json` exists.
-- **Read `docs/status/BLOCKED.md` before trusting plan section 2.4's S3**
-  ("263 cards") - it contradicts S4's own rarity-split sum (289). The
-  fixture set and `data/config/iar.expected_counts.json` use 289
-  (internally consistent with S4); this needs human resolution against the
-  official IAR product page.
+- **Real IAR card data is now available** at `data/IAR/` (a Card Vault
+  export - manifest.json, cards.json, images/ - gitignored, real LSS IP,
+  never commit it or anything derived from it). Ingest with
+  `uv run python scripts/ingest_cardvault.py --in-dir data/IAR --out
+  data/sets/IAR.json`, then `uv run python scripts/validate_set.py --in
+  data/sets/IAR.json --allow-incomplete` (2 real cards have an
+  unrepresentable variable cost/power - see `docs/status/BLOCKED.md`).
+  `data/sets/` is also gitignored. Every WP should still default to
+  developing against `FIXTURE` (262 cards, matching the real rarity split -
+  no dependency on data the repo doesn't ship), but real data is there to
+  sanity-check against, and WP-05's pack generator has been run against it
+  successfully (1000 packs).
+- **`docs/status/BLOCKED.md`'s S3/S4 total-mismatch entry is now RESOLVED**
+  by real data: the true IAR rarity split is F2/V3/L4/M40/R66/C133/B14 =
+  262 cards, not either of the plan's own numbers (263 or the S4 sum of
+  289). Plan section 2.4 S4 substantially overstated Marvel (27 vs 3) and
+  Basic (16 vs 14). `data/config/iar.expected_counts.json` and the whole
+  `FIXTURE` set now use the real numbers.
+- The-fab-cube (the *other* ingestion path, `scripts/ingest_set.py`) still
+  has no real IAR data as of last check - Card Vault
+  (`scripts/ingest_cardvault.py`) is the working real-data source.

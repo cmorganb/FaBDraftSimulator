@@ -35,11 +35,21 @@ def test_iar_pack_config_is_schema_valid_and_matches_s9() -> None:
     assert draftable_count == 14  # plan S9
 
 
-def test_index_by_rarity_excludes_arena_cards(fixture_cards: list[Card]) -> None:
+def test_index_by_rarity_excludes_hero_token_and_basic_arena_cards(
+    fixture_cards: list[Card],
+) -> None:
+    """Confirmed against real IAR data (docs/status/WP-05.md amendment):
+    heroes/tokens are excluded regardless of rarity, and only a Basic-rarity
+    arena card (a young hero's own weapon/arm-equipment) is excluded - a
+    non-Basic arena card (e.g. Common equipment) is NOT excluded.
+    """
     index = index_by_rarity(fixture_cards)
     all_indexed = [c for cards in index.values() for c in cards]
-    assert all(c.is_deck_card for c in all_indexed)
-    assert all(not c.is_arena_card for c in all_indexed)
+    assert all(c.object_type not in ("hero", "token") for c in all_indexed)
+    assert all(not (c.object_type == "arena" and c.rarity == "B") for c in all_indexed)
+    # the fixture set deliberately includes non-Basic arena equipment
+    # (see scripts/generate_fixture_set.py) - it must be indexed normally.
+    assert any(c.object_type == "arena" and c.rarity != "B" for c in all_indexed)
 
 
 def test_generate_pack_has_correct_size_and_draftable_count(
@@ -89,13 +99,25 @@ def test_expansion_slot_majestics_never_appear_in_a_draftable_slot(
                 )
 
 
-def test_no_hero_weapon_or_equipment_ever_appears_in_a_pack(
+def test_no_hero_or_token_appears_but_non_basic_equipment_can(
     fixture_cards: list[Card], fixture_pack_config: PackConfig
 ) -> None:
-    for i in range(50):
+    """Real IAR data proved is_arena_card alone is the wrong exclusion
+    filter (docs/status/WP-05.md amendment): heroes/tokens must never
+    appear in a pack, but non-Basic-rarity equipment is ordinary,
+    draftable booster content and *should* be able to appear.
+    """
+    seen_non_basic_arena_card = False
+    for i in range(200):
         rng = rng_for("seed-1", "pack", 1, i)
         pack = generate_pack(fixture_cards, fixture_pack_config, rng)
-        assert all(not c.card.is_arena_card for c in pack.cards)
+        assert all(c.card.object_type not in ("hero", "token") for c in pack.cards)
+        assert all(not (c.card.object_type == "arena" and c.card.rarity == "B") for c in pack.cards)
+        if any(c.card.object_type == "arena" for c in pack.cards):
+            seen_non_basic_arena_card = True
+    assert seen_non_basic_arena_card, (
+        "expected the fixture's non-Basic equipment to appear at least once in 200 packs"
+    )
 
 
 def test_same_seed_gives_identical_packs(
@@ -163,6 +185,7 @@ def _majestic_card(uid: str, *, is_expansion_slot: bool) -> Card:
             "keywords": [],
             "functional_text": "",
             "specialization": None,
+            "object_type": "deck",
             "is_deck_card": True,
             "is_arena_card": False,
             "equipment_slot": None,
@@ -226,6 +249,7 @@ def test_pack_generation_error_on_pool_exhaustion() -> None:
                 "keywords": [],
                 "functional_text": "",
                 "specialization": None,
+                "object_type": "deck",
                 "is_deck_card": True,
                 "is_arena_card": False,
                 "equipment_slot": None,

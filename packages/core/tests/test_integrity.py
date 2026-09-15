@@ -33,6 +33,7 @@ def _card(uid: str, rarity: str, *, data_complete: bool = True) -> Card:
         keywords=[],
         functional_text="",
         specialization=None,
+        object_type="deck",
         is_deck_card=True,
         is_arena_card=False,
         equipment_slot=None,

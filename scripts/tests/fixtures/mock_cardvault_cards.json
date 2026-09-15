@@ -1,0 +1,281 @@
+{
+  "metadata": {
+    "schema_version": 1,
+    "set_code": "MOCK",
+    "generated_at": "2026-01-01T00:00:00Z",
+    "source_url": "https://example.invalid/mock",
+    "card_count": 9
+  },
+  "cards": [
+    {
+      "card_id": "fixture-common-1",
+      "name": "Fixture Common",
+      "set_code": "MOCK",
+      "object_type": "deck-card",
+      "card_type": "regular",
+      "default_print_id": "MOCK001",
+      "rarity": "common",
+      "faces": [
+        {
+          "face_id": "MOCK001",
+          "name": "Fixture Common",
+          "typebox": "Action",
+          "text": "",
+          "pitch": 1,
+          "cost": 1,
+          "power": 2,
+          "defense": 2,
+          "intellect": null,
+          "life": null,
+          "classes": [],
+          "talents": [],
+          "types": ["Action"],
+          "subtypes": []
+        }
+      ],
+      "printings": [
+        {"print_id": "MOCK001", "set_number": 1, "rarity": "common", "product": "Mock Set"}
+      ]
+    },
+    {
+      "card_id": "fixture-runeblade-shadow-2",
+      "name": "Fixture Runeblade Shadow",
+      "set_code": "MOCK",
+      "object_type": "deck-card",
+      "card_type": "regular",
+      "default_print_id": "MOCK002",
+      "rarity": "majestic",
+      "faces": [
+        {
+          "face_id": "MOCK002",
+          "name": "Fixture Runeblade Shadow",
+          "typebox": "Shadow Runeblade Action - Attack",
+          "text": "Viserai Specialization\nWhen this hits, create a Gate to i'Arathael token.",
+          "pitch": 2,
+          "cost": 2,
+          "power": 6,
+          "defense": 3,
+          "intellect": null,
+          "life": null,
+          "classes": ["Runeblade"],
+          "talents": ["Shadow"],
+          "types": ["Action", "Attack"],
+          "subtypes": []
+        }
+      ],
+      "printings": [
+        {"print_id": "MOCK002", "set_number": 2, "rarity": "majestic", "product": "Mock Set"}
+      ]
+    },
+    {
+      "card_id": "fixture-generic-equipment-3",
+      "name": "Fixture Generic Equipment",
+      "set_code": "MOCK",
+      "object_type": "arena-card",
+      "card_type": "regular",
+      "default_print_id": "MOCK003",
+      "rarity": "common",
+      "faces": [
+        {
+          "face_id": "MOCK003",
+          "name": "Fixture Generic Equipment",
+          "typebox": "Generic Equipment - Head",
+          "text": "",
+          "pitch": null,
+          "cost": null,
+          "power": null,
+          "defense": 1,
+          "intellect": null,
+          "life": null,
+          "classes": ["Generic"],
+          "talents": [],
+          "types": ["Equipment"],
+          "subtypes": ["Head"]
+        }
+      ],
+      "printings": [
+        {"print_id": "MOCK003", "set_number": 3, "rarity": "common", "product": "Mock Set"}
+      ]
+    },
+    {
+      "card_id": "fixture-expansion-majestic-4",
+      "name": "Fixture Expansion Majestic",
+      "set_code": "MOCK",
+      "object_type": "deck-card",
+      "card_type": "regular",
+      "default_print_id": "MOCK900",
+      "rarity": "majestic",
+      "faces": [
+        {
+          "face_id": "MOCK900",
+          "name": "Fixture Expansion Majestic",
+          "typebox": "Action",
+          "text": "",
+          "pitch": 3,
+          "cost": 3,
+          "power": 5,
+          "defense": 4,
+          "intellect": null,
+          "life": null,
+          "classes": [],
+          "talents": [],
+          "types": ["Action"],
+          "subtypes": []
+        }
+      ],
+      "printings": [
+        {"print_id": "MOCK900", "set_number": 900, "rarity": "majestic", "product": "Mock Set"}
+      ]
+    },
+    {
+      "card_id": "fixture-hero",
+      "name": "Fixture Hero",
+      "set_code": "MOCK",
+      "object_type": "hero-card",
+      "card_type": "regular",
+      "default_print_id": "MOCK100",
+      "rarity": "basic",
+      "faces": [
+        {
+          "face_id": "MOCK100",
+          "name": "Fixture Hero",
+          "typebox": "Shadow Brute Hero - Young",
+          "text": "",
+          "pitch": null,
+          "cost": null,
+          "power": null,
+          "defense": null,
+          "intellect": 4,
+          "life": 20,
+          "classes": ["Brute"],
+          "talents": ["Shadow"],
+          "types": ["Hero"],
+          "subtypes": []
+        }
+      ],
+      "printings": [
+        {"print_id": "MOCK100", "set_number": 100, "rarity": "basic", "product": "Mock Set"}
+      ]
+    },
+    {
+      "card_id": "fixture-token",
+      "name": "Fixture Token",
+      "set_code": "MOCK",
+      "object_type": "token",
+      "card_type": "regular",
+      "default_print_id": "MOCK101",
+      "rarity": "basic",
+      "faces": [
+        {
+          "face_id": "MOCK101",
+          "name": "Fixture Token",
+          "typebox": "Shadow Token - Ally",
+          "text": "",
+          "pitch": null,
+          "cost": null,
+          "power": 2,
+          "defense": 2,
+          "intellect": null,
+          "life": null,
+          "classes": [],
+          "talents": ["Shadow"],
+          "types": ["Token"],
+          "subtypes": ["Ally"]
+        }
+      ],
+      "printings": [
+        {"print_id": "MOCK101", "set_number": 101, "rarity": "basic", "product": "Mock Set"}
+      ]
+    },
+    {
+      "card_id": "fixture-weapon",
+      "name": "Fixture Weapon",
+      "set_code": "MOCK",
+      "object_type": "arena-card",
+      "card_type": "regular",
+      "default_print_id": "MOCK102",
+      "rarity": "basic",
+      "faces": [
+        {
+          "face_id": "MOCK102",
+          "name": "Fixture Weapon",
+          "typebox": "Shadow Brute Weapon - Hammer (2H)",
+          "text": "",
+          "pitch": null,
+          "cost": null,
+          "power": 6,
+          "defense": null,
+          "intellect": null,
+          "life": null,
+          "classes": ["Brute"],
+          "talents": ["Shadow"],
+          "types": ["Weapon"],
+          "subtypes": ["(2H)", "Hammer"]
+        }
+      ],
+      "printings": [
+        {"print_id": "MOCK102", "set_number": 102, "rarity": "basic", "product": "Mock Set"}
+      ]
+    },
+    {
+      "card_id": "fixture-variable-5",
+      "name": "Fixture Variable",
+      "set_code": "MOCK",
+      "object_type": "deck-card",
+      "card_type": "regular",
+      "default_print_id": "MOCK005",
+      "rarity": "rare",
+      "faces": [
+        {
+          "face_id": "MOCK005",
+          "name": "Fixture Variable",
+          "typebox": "Action",
+          "text": "",
+          "pitch": 1,
+          "cost": "X",
+          "power": "*",
+          "defense": 2,
+          "intellect": null,
+          "life": null,
+          "classes": [],
+          "talents": [],
+          "types": ["Action"],
+          "subtypes": []
+        }
+      ],
+      "printings": [
+        {"print_id": "MOCK005", "set_number": 5, "rarity": "rare", "product": "Mock Set"}
+      ]
+    },
+    {
+      "card_id": "fixture-bad-rarity",
+      "name": "Fixture Bad Rarity",
+      "set_code": "MOCK",
+      "object_type": "deck-card",
+      "card_type": "regular",
+      "default_print_id": "MOCK900A",
+      "rarity": "super-rare",
+      "faces": [
+        {
+          "face_id": "MOCK900A",
+          "name": "Fixture Bad Rarity",
+          "typebox": "Action",
+          "text": "",
+          "pitch": 1,
+          "cost": 1,
+          "power": 1,
+          "defense": 1,
+          "intellect": null,
+          "life": null,
+          "classes": [],
+          "talents": [],
+          "types": ["Action"],
+          "subtypes": []
+        }
+      ],
+      "printings": [
+        {"print_id": "MOCK900A", "set_number": 950, "rarity": "super-rare", "product": "Mock Set"}
+      ]
+    }
+  ]
+}

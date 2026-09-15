@@ -9,9 +9,10 @@ for the full specification, work breakdown, and status tracking conventions
 **Not affiliated with or endorsed by Legend Story Studios.** Flesh and Blood
 is a trademark of Legend Story Studios. No card text, card images, or other
 Legend Story Studios IP is committed to this repository; card data is fetched
-at setup time from third-party open datasets (see `scripts/ingest_set.py`)
-into `data/`, which is gitignored. This is a personal, non-commercial
-training tool.
+or supplied locally (see `scripts/ingest_set.py` and
+`scripts/ingest_cardvault.py`) into `data/`, which is entirely gitignored
+except the synthetic `data/fixtures/` and `data/config/` directories. This
+is a personal, non-commercial training tool.
 
 ## Status
 

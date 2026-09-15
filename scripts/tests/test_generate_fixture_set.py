@@ -32,19 +32,20 @@ def _registry() -> Registry[Any]:
     return Registry().with_resources(resources)
 
 
-def test_rarity_counts_match_plan_section_2_4_s4_breakdown() -> None:
-    # S3 ("Set size: 263 cards") does not match the sum of S4's own
-    # breakdown (289) - see module docstring in generate_fixture_set.py and
-    # docs/status/BLOCKED.md. This test pins the itemized S4 numbers, which
-    # is what pack generation (WP-05) actually depends on.
-    assert RARITY_COUNTS == {"F": 2, "V": 27, "L": 5, "M": 40, "R": 66, "C": 133, "B": 16}
-    assert sum(RARITY_COUNTS.values()) == 289
+def test_rarity_counts_match_real_iar_data() -> None:
+    # plan section 2.4's own S4 table is wrong (see docs/status/BLOCKED.md):
+    # it overstated Marvel (27 vs. real 3) and Basic (16 vs. real 14), and
+    # slightly overstated Legendary (5 vs. real 4). These are the real
+    # numbers, confirmed against a Card Vault export of IAR and ingested via
+    # scripts/ingest_cardvault.py (see docs/status/WP-05.md's amendment).
+    assert RARITY_COUNTS == {"F": 2, "V": 3, "L": 4, "M": 40, "R": 66, "C": 133, "B": 14}
+    assert sum(RARITY_COUNTS.values()) == 262
     assert RARITY_COUNTS["M"] == MAJESTIC_CORE + MAJESTIC_EXPANSION
 
 
 def test_generated_snapshot_matches_expected_counts_exactly() -> None:
     snapshot = build_fixture_set()
-    assert len(snapshot.cards) == 289
+    assert len(snapshot.cards) == 262
     for rarity, expected in RARITY_COUNTS.items():
         actual = sum(1 for c in snapshot.cards if c.rarity == rarity)
         assert actual == expected, f"rarity {rarity}: expected {expected}, got {actual}"
@@ -61,14 +62,19 @@ def test_generated_snapshot_has_unique_uids_and_card_numbers() -> None:
 
 def test_generated_snapshot_has_three_heroes_with_weapon_and_arm_equipment() -> None:
     snapshot = build_fixture_set()
-    arena_cards = [c for c in snapshot.cards if c.is_arena_card]
-    heroes = [c for c in arena_cards if "Hero" in c.types]
+    heroes = [c for c in snapshot.cards if c.object_type == "hero"]
+    arena_cards = [c for c in snapshot.cards if c.object_type == "arena" and c.rarity == "B"]
     weapons = [c for c in arena_cards if "Weapon" in c.types]
     arms = [c for c in arena_cards if c.equipment_slot == "arms"]
     assert len(heroes) == 3
     assert len(weapons) == 3
     assert len(arms) == 3
-    assert all(c.rarity == "B" for c in arena_cards)  # plan S10: basic-rarity weapon + arm
+    assert all(c.rarity == "B" for c in heroes)  # plan S10: basic-rarity weapon + arm
+    assert all(c.rarity == "B" for c in arena_cards)
+    # the fixture also includes non-Basic-rarity equipment (pack-eligible,
+    # unlike the heroes' own gear) - see scripts/generate_fixture_set.py.
+    non_basic_arena = [c for c in snapshot.cards if c.object_type == "arena" and c.rarity != "B"]
+    assert len(non_basic_arena) == 2
 
 
 def test_expansion_majestics_are_not_draftable_and_core_ones_are() -> None:
@@ -90,7 +96,7 @@ def test_fixture_set_json_on_disk_validates_against_set_schema() -> None:
     schema = json.loads((CONTRACTS_DIR / "set.schema.json").read_text())
     validator = Draft202012Validator(schema, registry=_registry())
     validator.validate(instance)
-    assert instance["expected_counts"]["total"] == 289
+    assert instance["expected_counts"]["total"] == 262
     assert set(instance["expected_counts"].keys()) == {
         "total",
         "F",

@@ -20,9 +20,9 @@ class Card(BaseModel):
     set_code: str
     card_number: str
     name: str
-    pitch: Literal[1, 2, 3] | None = Field(
+    pitch: int | None = Field(
         ...,
-        description="1=red, 2=yellow, 3=blue; null for cards with no pitch value (e.g. heroes, weapons).",
+        description="1=red, 2=yellow, 3=blue; null for cards with no pitch value (e.g. heroes, weapons). Not restricted to 1-3: some special cards (e.g. Fabled 'Soul' resources) use other values (confirmed against real IAR data) - never clamp or reject an unusual pitch value.",
     )
     rarity: Literal["B", "C", "R", "M", "L", "V", "F"] = Field(
         ...,
@@ -45,6 +45,10 @@ class Card(BaseModel):
     specialization: str | None = Field(
         ..., description="Hero name if this card's text contains a Specialization restriction."
     )
+    object_type: Literal["deck", "arena", "hero", "token"] = Field(
+        ...,
+        description="Authoritative category, mirroring the real card database's own object_type (deck-card/arena-card/hero-card/token). 'deck' = counts toward the 30-card deck; 'arena' = weapon/equipment, registered separately; 'hero' = a hero (also an arena card per the plan glossary, but never appears in a booster pack regardless of its own rarity - see fabdraft_core.packs.generator); 'token' = created during play, never drafted or deck-built. is_deck_card/is_arena_card below are derived conveniences and are NOT complementary: a hero or token has both false.",
+    )
     is_deck_card: bool
     is_arena_card: bool
     equipment_slot: Literal["head", "chest", "arms", "legs"] | None
@@ -57,7 +61,7 @@ class Card(BaseModel):
     )
     is_expansion_slot: bool = Field(
         ...,
-        description="True for a Majestic printed only in the expansion (non-core) subset of the set (plan S13), mapped from the upstream dataset's printings[].expansion_slot field. False for every other card. Used by the pack generator to keep expansion-slot Majestics out of every draftable pack slot (S13).",
+        description="True for a Majestic printed only in the expansion (non-core) subset of the set (plan S13). Derivation is source-specific: the-fab-cube dataset exposes printings[].expansion_slot directly; Card Vault exports don't, so it's inferred from a contiguous high set-number block (confirmed against real IAR data: set numbers 243-262 are exactly the 20 expansion Majestics). False for every other card. Used by the pack generator to keep expansion-slot Majestics out of every draftable pack slot (S13).",
     )
     data_complete: bool = Field(
         ...,

@@ -14,7 +14,7 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 | WP-04 | Seeded RNG + event store | WP-03 | DONE | [WP-04.md](./WP-04.md) |
 | WP-05 | Pack generator | WP-02, WP-04 | DONE | [WP-05.md](./WP-05.md) |
 | WP-06 | Card model, indexes, legality | WP-02 | DONE | [WP-06.md](./WP-06.md) |
-| WP-07 | Draft state machine | WP-04, WP-05 | NOT STARTED | - |
+| WP-07 | Draft state machine | WP-04, WP-05 | DONE | [WP-07.md](./WP-07.md) |
 | WP-08 | Information policy enforcement | WP-07 | NOT STARTED | - |
 | WP-09 | Deck build + validation | WP-06, WP-07 | NOT STARTED | - |
 | WP-10 | Pool and deck metrics + IAR tags | WP-09 | NOT STARTED | - |
@@ -37,9 +37,21 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 
 ## Notes for the next agent
 
-- WP-07 (draft state machine) is unblocked (WP-04 + WP-05 both done) and is
-  the natural next pick - it's the last dependency both WP-08 and WP-09
-  (which also needs WP-06, now done) are waiting on.
+- WP-08 (information policy enforcement) and WP-09 (deck build +
+  validation, now that WP-06 is also done) are both unblocked and are the
+  natural next picks; WP-11 (log writers) is unblocked too.
+- WP-07's engine uses a deliberately temporary `PickSource` protocol
+  (`fabdraft_core.draft.engine.PickSource`) instead of the real `Agent`/
+  `AgentView` pair, since WP-08/WP-14 didn't exist yet. WP-08 should either
+  adapt a real Agent into that shape or refactor the engine's pick-gathering
+  loop to accept `AgentView`s directly - check `docs/status/WP-07.md`
+  before assuming either way.
+- **Found a second real spec contradiction** (see `docs/status/BLOCKED.md`,
+  RESOLVED entries): plan section 6.2's invariant "a seat never receives
+  the same pack twice within a round" is mathematically false for an
+  8-seat/14-pick pod and contradicts the plan's own "Wheel" glossary entry.
+  The engine implements real wheeling (verified against the glossary), not
+  the false invariant - don't re-introduce it.
 - `docs/sources/en-fab-{cr,trp}.txt` (full Comprehensive Rules / Tournament
   Rules text, kept locally by the user, not committed - see memory
   `rules-text-sources`) are the authoritative source for `# CR`/`# TRP`

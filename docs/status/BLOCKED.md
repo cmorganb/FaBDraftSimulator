@@ -16,6 +16,26 @@ section 15, handoff protocol).
   or "resolve VERIFY item S9">
 ```
 
+## RESOLVED (2026-09-14, WP-07): section 6.2's "never receives the same pack twice" invariant is wrong
+
+Plan section 6.2 states as an invariant: "A seat never receives the same
+pack twice within a round." This directly contradicts the plan's *own*
+glossary (section 17): "Wheel: A pack returning to a seat after passing
+around the pod (with 14 cards and 8 seats, picks 9 to 14 come from wheeled
+packs)." It's also provably false by the pass-rotation math: with an 8-seat
+pod, the pack originating at seat O is back at seat O after exactly 8
+passes, i.e. at pick 9 - which happens every round, for every seat, for 6
+of the 8 packs each seat handles (picks 1-6's origins wheel back at picks
+9-14; picks 7-8's origins don't, since 7+8=15 and 8+8=16 exceed the 14-pick
+round).
+
+**Resolved by implementing the correct (glossary-consistent) behavior**:
+real shuffle-then-pass (TRP 8.2.1) naturally produces wheeling, and
+`fabdraft_core.draft.engine` does exactly that. The false invariant is not
+asserted anywhere in code; `test_wheeling_matches_the_plan_glossary`
+(`packages/core/tests/test_draft_engine.py`) pins the actual, correct
+behavior instead. See `docs/status/WP-07.md`.
+
 ## RESOLVED (2026-09-14): plan section 2.4 S3/S4 rarity-count discrepancy
 
 Original entry (2026-09-14): S3 stated "Set size: 263 cards" while S4's own

@@ -17,7 +17,7 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 | WP-07 | Draft state machine | WP-04, WP-05 | DONE | [WP-07.md](./WP-07.md) |
 | WP-08 | Information policy enforcement | WP-07 | DONE | [WP-08.md](./WP-08.md) |
 | WP-09 | Deck build + validation | WP-06, WP-07 | DONE | [WP-09.md](./WP-09.md) |
-| WP-10 | Pool and deck metrics + IAR tags | WP-09 | IN PROGRESS (2026-09-14) | - |
+| WP-10 | Pool and deck metrics + IAR tags | WP-09 | DONE | [WP-10.md](./WP-10.md) |
 | WP-11 | Log writers | WP-07, WP-09 | DONE | [WP-11.md](./WP-11.md) |
 | WP-12 | Replay | WP-11 | IN PROGRESS (2026-09-14) | - |
 | WP-13 | Exports | WP-09 | IN PROGRESS (2026-09-14) | - |

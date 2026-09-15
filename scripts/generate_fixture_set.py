@@ -169,10 +169,13 @@ def build_heroes() -> list[Card]:
                 name=hero["name"],
                 pitch=None,
                 rarity="B",
-                types=["Hero", "Young"],
+                types=["Hero"],
                 classes=hero_classes,
                 talents=[TALENT],
-                subtypes=[],
+                # "Young" lives in subtypes, not types - matches real IAR
+                # data exactly (confirmed via Card Vault export: every
+                # young hero has subtypes=["Young"], adult forms don't).
+                subtypes=["Young"],
                 cost=None,
                 power=None,
                 defense=None,

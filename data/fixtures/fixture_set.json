@@ -8840,8 +8840,7 @@
       "pitch": null,
       "rarity": "B",
       "types": [
-        "Hero",
-        "Young"
+        "Hero"
       ],
       "classes": [
         "Brute"
@@ -8849,7 +8848,9 @@
       "talents": [
         "Shadow"
       ],
-      "subtypes": [],
+      "subtypes": [
+        "Young"
+      ],
       "cost": null,
       "power": null,
       "defense": null,
@@ -8950,8 +8951,7 @@
       "pitch": null,
       "rarity": "B",
       "types": [
-        "Hero",
-        "Young"
+        "Hero"
       ],
       "classes": [
         "Necromancer"
@@ -8959,7 +8959,9 @@
       "talents": [
         "Shadow"
       ],
-      "subtypes": [],
+      "subtypes": [
+        "Young"
+      ],
       "cost": null,
       "power": null,
       "defense": null,
@@ -9060,8 +9062,7 @@
       "pitch": null,
       "rarity": "B",
       "types": [
-        "Hero",
-        "Young"
+        "Hero"
       ],
       "classes": [
         "Runeblade"
@@ -9069,7 +9070,9 @@
       "talents": [
         "Shadow"
       ],
-      "subtypes": [],
+      "subtypes": [
+        "Young"
+      ],
       "cost": null,
       "power": null,
       "defense": null,

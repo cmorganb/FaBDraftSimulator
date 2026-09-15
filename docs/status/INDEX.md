@@ -15,7 +15,7 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 | WP-05 | Pack generator | WP-02, WP-04 | DONE | [WP-05.md](./WP-05.md) |
 | WP-06 | Card model, indexes, legality | WP-02 | DONE | [WP-06.md](./WP-06.md) |
 | WP-07 | Draft state machine | WP-04, WP-05 | DONE | [WP-07.md](./WP-07.md) |
-| WP-08 | Information policy enforcement | WP-07 | IN PROGRESS (2026-09-14) | - |
+| WP-08 | Information policy enforcement | WP-07 | DONE | [WP-08.md](./WP-08.md) |
 | WP-09 | Deck build + validation | WP-06, WP-07 | IN PROGRESS (2026-09-14) | - |
 | WP-10 | Pool and deck metrics + IAR tags | WP-09 | NOT STARTED | - |
 | WP-11 | Log writers | WP-07, WP-09 | NOT STARTED | - |
@@ -37,9 +37,13 @@ dependency edges cross is forbidden. Each `DONE` row must have a matching
 
 ## Notes for the next agent
 
-- WP-08 (information policy enforcement) and WP-09 (deck build +
-  validation, now that WP-06 is also done) are both unblocked and are the
-  natural next picks; WP-11 (log writers) is unblocked too.
+- WP-08 is done: `fabdraft_core.draft.views.build_agent_view` (see
+  docs/status/WP-08.md) builds the per-pick `AgentView`, scoped to active
+  pick windows only - there's no `ReviewView` yet (the plan names one in
+  `Agent.review()` but never gives it a contract), so "own_pool visible
+  during review" isn't reachable from this function. WP-14 should wire a
+  real Agent's `pick()` call through `build_agent_view` in place of the
+  engine's temporary `PickSource.get_pick(seat, list[Card], deadline_ms)`.
 - WP-07's engine uses a deliberately temporary `PickSource` protocol
   (`fabdraft_core.draft.engine.PickSource`) instead of the real `Agent`/
   `AgentView` pair, since WP-08/WP-14 didn't exist yet. WP-08 should either
